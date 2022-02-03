@@ -2,6 +2,7 @@
 # add diagonal lines
 # draw outline first
 
+from email.policy import default
 from tabnanny import check
 from PIL import Image
 
@@ -20,8 +21,12 @@ class Node:
 
 	def __getitem__(self, key):
 		match key:
-			case (-1, 0):
-				return self.left
+			case (-1, 0): return self.left
+			case (1, 0):  return self.right
+			case (0, -1): return self.top
+			case (0, 1):  return self.bottom
+			case _: raise KeyError
+			
 
 def check_direction(node, direction: tuple[int, int]):
 	chain = 1
