@@ -4,7 +4,6 @@
 
 # tuple[int, int] prolly should have its own Position class
 
-from tabnanny import check
 from typing_extensions import Self
 from PIL import Image
 
@@ -51,10 +50,11 @@ def navigate(img):
 	(nodes, _) = make_nodes(img)
 	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
 	
-	node = nodes.pop()
 	while len(nodes) > 0:
-		while node.visited:
+		while len(nodes) > 0:
 			node = nodes.pop()
+			if not node.visited: break
+		else: break
 		longchain = 0
 		selected = (0, 0)
 		for direction in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -62,7 +62,7 @@ def navigate(img):
 			if chain > longchain:
 				longchain = chain
 				selected = direction
-		endpos = mark_direction_visited(selected)
+		endpos = mark_direction_visited(node, selected)
 		moves.append(((node.x, node.y), endpos))
 	return moves
 
