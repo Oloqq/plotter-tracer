@@ -46,6 +46,7 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> tuple[int,
 
 # algorithm: pick an unvisited spot, find longest uninterrupted orthagonal path
 # from it, paint it, mark as visited, repeat
+# todo make end position the next start position
 def navigate(img):
 	(nodes, _) = make_nodes(img)
 	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
