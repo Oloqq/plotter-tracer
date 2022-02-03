@@ -2,10 +2,11 @@
 # add diagonal lines
 # draw outline first
 
-from email.policy import default
-from tabnanny import check
-from PIL import Image
+# tuple[int, int] prolly should have its own Position class
 
+from tabnanny import check
+from typing_extensions import Self
+from PIL import Image
 
 moves = []
 
@@ -19,7 +20,7 @@ class Node:
 		self.top = None
 		self.bottom = None
 
-	def __getitem__(self, key):
+	def __getitem__(self, key) -> Self | None:
 		match key:
 			case (-1, 0): return self.left
 			case (1, 0):  return self.right
@@ -28,29 +29,42 @@ class Node:
 			case _: raise KeyError
 			
 
-def check_direction(node, direction: tuple[int, int]):
+def check_direction(node: Node, direction: tuple[int, int]):
 	chain = 1
-	while node[direction]:
-		node = node[direction]
+	while node[direction] and not node[direction].visited:
 		chain += 1
+		node = node[direction]
 	return chain
+
+# mark nodes in a direction of node as selected
+# additionaly, return position of the last node
+def mark_direction_visited(node: Node, direction: tuple[int, int]) -> tuple[int, int]:
+	node.visited = True
+	while node[direction] and not node[direction].visited:
+		node = node[direction]
+		node.visited = True
+	return (node.x, node.y)
 
 # algorithm: pick an unvisited spot, find longest uninterrupted orthagonal path
 # from it, paint it, mark as visited, repeat
 def navigate(img):
 	(nodes, _) = make_nodes(img)
-	node = nodes.pop()
-	longchain = 0
-	selected = (0, 0)
-	# check left
-	chain = check_direction(node, (-1, 0))
-	if chain > longchain:
-		longchain = chain
-		selected = (-1, 0)
-
-	assert selected == (-1, 0)
-	assert longchain == 9, longchain
+	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
 	
+	node = nodes.pop()
+	while len(nodes) > 0:
+		while node.visited:
+			node = nodes.pop()
+		longchain = 0
+		selected = (0, 0)
+		for direction in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+			chain = check_direction(node, direction)
+			if chain > longchain:
+				longchain = chain
+				selected = direction
+		endpos = mark_direction_visited(selected)
+		moves.append(((node.x, node.y), endpos))
+	return moves
 
 def painted(pixel):
 	return pixel == 0 # black pixels are considered painted
@@ -94,8 +108,6 @@ if __name__ == "__main__":
 	def t_navigate():
 		img = Image.open('data/plopchart.png')
 		moves = navigate(img)
-		# should start at bottom right
-
-		# should pick line to the left or up
+		print(moves)
 	
 	t_navigate()
