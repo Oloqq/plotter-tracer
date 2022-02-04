@@ -4,13 +4,8 @@ from visualiser import visualize
 from PIL import Image
 
 if __name__ == '__main__':
-	img = Image.open('data/lenny.png')
-	pixels = img.load()
-	width, height = img.size
-	make_plopchart(pixels, width, height, 1)
+	plopchart = make_plopchart('data/lenny.png', save=False, show=False)
+	moves = navigate(plopchart)
 
-	img = Image.open('data/out.png')
-	moves = navigate(img)
-
-	width, height = img.size
+	width, height = plopchart.size
 	visualize(moves, width, height)

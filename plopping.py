@@ -11,7 +11,7 @@ brush_um = 2400 # um = micrometers
 pixel_to_um = 2400
 plops_per_pixel = math.floor(pixel_to_um / brush_um)
 
-def make_plopchart(filename, outfile=False, show=False):
+def make_plopchart(filename, save=False, show=False):
 	img = Image.open(filename)
 	pixels = img.load()
 	w, h = img.size
@@ -30,14 +30,14 @@ def make_plopchart(filename, outfile=False, show=False):
 				for j in range(ppp):
 					out.putpixel((x*ppp+i, y*ppp+j), val)
 
-	if type(outfile) is str:
-		out.save(outfile)
+	if type(save) is str:
+		out.save(save)
 	if show: 
 		out.show()
 
 	return out
 
 if __name__ == "__main__":
-	out = make_plopchart('data/smile.png', outfile='data/out.png', show=False)
+	out = make_plopchart('data/smile.png', save='data/out.png', show=False)
 	print(out)
 
