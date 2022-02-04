@@ -16,7 +16,7 @@ grid = True
 def convert(pos, translate=0):
 	return (pos[0]*tile_size + translate, pos[1]*tile_size + translate)
 
-def visualize(moves, width, height):
+def visualize(moves, width, height, show=False):
 	img = Image.new('RGB',
 		(width * tile_size, height * tile_size), color=bg_color)
 	draw = ImageDraw.Draw(img, 'RGBA')
@@ -49,7 +49,7 @@ def visualize(moves, width, height):
 					pen_down = True
 					draw.arc(convert(pos, pad-dot_size) + convert(pos, pad+dot_size), 90, -90, fill=(0, 255, 0), width=15)
 
-	# img.show()
+	if show: img.show()
 	now = datetime.now()
 	img.save(f'data/visualiser_out/{now.strftime("%m-%d-%Y %H-%M-%S")}.png')
 

@@ -1,7 +1,6 @@
 from plopping import make_plopchart
 from navigating import navigate
 from visualiser import visualize
-from PIL import Image
 
 # slicing 3d objects into layers to print - slicer
 # tracing the route of a pen on paper     - tracer
@@ -11,4 +10,7 @@ if __name__ == '__main__':
 	moves = navigate(plopchart)
 
 	width, height = plopchart.size
-	visualize(moves, width, height)
+	# the result is saved in data/visualiser_out
+	visualize(moves, width, height, show=False)
+
+	# gcode(plopchart)
