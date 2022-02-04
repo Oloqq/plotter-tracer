@@ -113,24 +113,4 @@ def make_nodes(img):
 	return nodes, nodemap
 
 if __name__ == "__main__":
-	def t_make_nodes():
-		img = Image.open('data/plopchart.png')
-		nodes, nodemap = make_nodes(img)
-		lefttop = nodemap[0][0]
-		assert lefttop
-		assert not lefttop.top
-		assert not lefttop.left
-		assert lefttop.bottom
-		cursor = lefttop.bottom
-		assert cursor.top
-		assert cursor.bottom
-		cursor = lefttop.bottom
-		assert cursor.top
-		assert cursor.right
-
-	def t_navigate():
-		img = Image.open('data/plopchart.png')
-		moves = navigate(img)
-		print(moves)
-	
-	t_navigate()
+	print('bruh')

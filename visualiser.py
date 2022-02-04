@@ -55,13 +55,9 @@ def visualize(moves, width, height):
 
 
 if __name__ == '__main__':
-	# moves = [((8, 8), (0, 8)), ((8, 7), (0, 7)), ((8, 6), (0, 6)), ((8, 5), (8, 0)), ((7, 5), (7, 0)), ((6, 5), (6, 0)), ((5, 2), (0, 2)), ((5, 1), (0, 1)), ((5, 0), (0, 0)), ((2, 5), (0, 5)), ((2, 4), (0, 4)), ((2, 3), (0, 3))]
 	width = 32
 	height = 32
 	img = Image.open('data/out.png')
 	moves = navigate(img)
 	print(moves)
 	visualize(moves, width, height)
-
-# slicing 3d objects into layers to print - slicer
-# tracing the route of a pen on paper - tracer
