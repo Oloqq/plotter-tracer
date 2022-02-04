@@ -3,6 +3,27 @@
 # draw outline first
 
 # tuple[int, int] prolly should have its own Position class
+# try starting the next move where previous one finished
+
+# current algorithm (dogshit):
+# pick an unvisited spot
+# find longest uninterrupted orthagonal path from it
+# draw it, mark as visited
+# repeat
+
+# algorithm (dogpoop):
+# as dogshit but end position of a stroke is the next one's start position
+
+# algorithm (closing circles):
+# get outline of the shape
+# draw that outline in one long stroke
+# remove the outline from plopchart
+# repeat
+
+# algorithm (stripes):
+# pick the direction of the stripes
+# start up of the plate
+# move back and forth lowering the pen wherever there is a dot 
 
 from typing_extensions import Self
 from PIL import Image
@@ -44,9 +65,6 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> tuple[int,
 		node.visited = True
 	return (node.x, node.y)
 
-# algorithm: pick an unvisited spot, find longest uninterrupted orthagonal path
-# from it, paint it, mark as visited, repeat
-# todo make end position the next start position
 def navigate(img):
 	(nodes, _) = make_nodes(img)
 	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
