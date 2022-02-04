@@ -35,7 +35,7 @@ def visualize(moves, width, height, show=False):
 	pos = (0, 0)
 	pen_down = False
 	for move in moves:
-		print(move)
+		# print(move)
 		if type(move) is tuple: # it's a displacement
 			color = line_contact_color if pen_down else line_lifted_color
 			draw.line(convert(pos, pad) + convert(move, pad), fill=color, width=line_size)
