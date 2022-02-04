@@ -74,6 +74,9 @@ def navigate(img):
 			node = nodes.pop()
 			if not node.visited: break
 		else: break
+		moves.append((node.x, node.y))
+		moves.append('pen down')
+		
 		longchain = 0
 		selected = (0, 0)
 		for direction in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -82,7 +85,8 @@ def navigate(img):
 				longchain = chain
 				selected = direction
 		endpos = mark_direction_visited(node, selected)
-		moves.append(((node.x, node.y), endpos))
+		moves.append(endpos)
+		moves.append('pen up')
 	return moves
 
 def painted(pixel):
