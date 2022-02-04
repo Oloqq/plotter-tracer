@@ -33,16 +33,10 @@ def make_plopchart(pixels, w, h, ppp):
 
 	return out
 
-def main():
+if __name__ == "__main__":
 	img = Image.open('data/smile.png')
 	pixels = img.load()
 	width, height = img.size
 	make_plopchart(pixels, width, height, plops_per_pixel)
-	# for x in range(width):
-	# 	for y in range(height):
-	# 		print(pixels[x, y])
-
-if __name__ == "__main__":
-	main()
 
 

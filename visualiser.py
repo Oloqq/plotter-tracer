@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw
 from navigating import navigate
+from datetime import datetime
 
 line_contact_color = (128, 255, 255, 180)
 line_lifted_color = (255, 255, 128, 100)
@@ -48,7 +49,9 @@ def visualize(moves, width, height):
 					pen_down = True
 					draw.arc(convert(pos, pad-dot_size) + convert(pos, pad+dot_size), 90, -90, fill=(0, 255, 0), width=15)
 
-	img.show()
+	# img.show()
+	now = datetime.now()
+	img.save(f'data/visualiser_out/{now.strftime("%m-%d-%Y %H-%M-%S")}.png')
 
 
 if __name__ == '__main__':
