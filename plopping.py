@@ -8,7 +8,7 @@
 from PIL import Image
 import math
 
-brush_um = 800
+brush_um = 2400
 pixel_to_um = 2400
 plops_per_pixel = math.floor(pixel_to_um / brush_um)
 print('ppp: ', plops_per_pixel)
@@ -34,7 +34,7 @@ def make_plopchart(pixels, w, h, ppp):
 	return out
 
 def main():
-	img = Image.open('data/3x3.png')
+	img = Image.open('data/smile.png')
 	pixels = img.load()
 	width, height = img.size
 	make_plopchart(pixels, width, height, plops_per_pixel)
