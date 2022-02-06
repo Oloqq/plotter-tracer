@@ -1,6 +1,6 @@
 #temp
 from plopping import make_plopchart
-from navigating import navigate
+from navigating import longstroke
 from visualiser import visualize
 
 gcode = ''
@@ -74,7 +74,7 @@ M84 ; Disable all steppers
 
 if __name__ == '__main__':
 	plopchart = make_plopchart('data/smile.png', save=False, show=False)
-	moves = navigate(plopchart)
+	moves = longstroke(plopchart)
 
 
 	# width, height = plopchart.size

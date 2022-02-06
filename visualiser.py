@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from navigating import navigate
+from navigating import longstroke
 from datetime import datetime
 
 line_contact_color = (128, 255, 255, 180)
@@ -58,6 +58,6 @@ if __name__ == '__main__':
 	width = 32
 	height = 32
 	img = Image.open('data/out.png')
-	moves = navigate(img)
+	moves = longstroke(img)
 	print(moves)
 	visualize(moves, width, height)

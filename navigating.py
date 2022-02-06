@@ -5,14 +5,7 @@
 # tuple[int, int] prolly should have its own Position class
 # try starting the next move where previous one finished
 
-# current algorithm (dogshit):
-# pick an unvisited spot
-# find longest uninterrupted orthagonal path from it
-# draw it, mark as visited
-# repeat
-
-# algorithm (dogpoop):
-# as dogshit but end position of a stroke is the next one's start position
+# figure out the size of the visualisation from the moves
 
 # algorithm (closing circles):
 # get outline of the shape
@@ -65,7 +58,11 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> tuple[int,
 		node.visited = True
 	return (node.x, node.y)
 
-def navigate(img):
+# algorithm (longstroke):
+# pick an unpainted spot
+# find longest uninterrupted orthagonal path from it
+# paint it try to repeat from the end spot, else pick a random new spot
+def longstroke(img):
 	(nodes, _) = make_nodes(img)
 	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
 	
