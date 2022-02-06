@@ -3,7 +3,6 @@
 # draw outline first
 
 # tuple[int, int] prolly should have its own Position class
-# try starting the next move where previous one finished
 
 # figure out the size of the visualisation from the moves
 
@@ -19,7 +18,6 @@
 # move back and forth lowering the pen wherever there is a dot 
 
 from typing_extensions import Self
-from PIL import Image
 
 moves = []
 
@@ -51,29 +49,26 @@ def check_direction(node: Node, direction: tuple[int, int]):
 
 # mark nodes in a direction of node as selected
 # additionaly, return position of the last node
-def mark_direction_visited(node: Node, direction: tuple[int, int]) -> tuple[int, int]:
+def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 	node.visited = True
 	while node[direction] and not node[direction].visited:
 		node = node[direction]
 		node.visited = True
-	return (node.x, node.y)
+	return node
 
 # algorithm (longstroke):
 # pick an unpainted spot
-# find longest uninterrupted orthagonal path from it
+# find longest uninterrupted orthagonal (todo: orthodiagonal) path from it
 # paint it try to repeat from the end spot, else pick a random new spot
 def longstroke(img):
 	(nodes, _) = make_nodes(img)
-	moves: list[tuple[tuple[int, int], tuple[int, int]]] = []
+	moves: list[tuple[int, int] | str] = []
 	
-	while len(nodes) > 0:
-		while len(nodes) > 0:
-			node = nodes.pop()
-			if not node.visited: break
-		else: break
-		moves.append((node.x, node.y))
-		moves.append('pen down')
-		
+	node = nodes.pop()
+	moves.append((node.x, node.y))
+	moves.append('pen down')
+
+	while len(nodes) > 0:		
 		longchain = 0
 		selected = (0, 0)
 		for direction in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -81,9 +76,19 @@ def longstroke(img):
 			if chain > longchain:
 				longchain = chain
 				selected = direction
-		endpos = mark_direction_visited(node, selected)
-		moves.append(endpos)
-		moves.append('pen up')
+		endnode = mark_direction_visited(node, selected)
+
+		if longchain > 1: # there is an actual stroke
+			moves.append((endnode.x, endnode.y))
+			node = endnode
+		elif longchain == 1: # this node is the only one getting painted
+			moves.append('pen up')
+			while len(nodes) > 0:
+				node = nodes.pop()
+				if not node.visited: break
+			else: break
+			moves.append((node.x, node.y))
+			moves.append('pen down')
 	return moves
 
 def painted(pixel):
