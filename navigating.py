@@ -1,8 +1,4 @@
 # this is a proof of concept navigator, I plan to do a better one in the future
-# add diagonal lines
-# draw outline first
-
-# tuple[int, int] prolly should have its own Position class
 
 # algorithm (stripes):
 # pick the direction of the stripes

@@ -1,3 +1,4 @@
+from turtle import Vec2D
 from PIL import Image, ImageDraw
 from navigating import longstroke
 from datetime import datetime
@@ -13,10 +14,15 @@ dot_size = 8
 line_size = 10
 tile_size = 50
 pad = tile_size / 2
+centering_vec = Vec2D(tile_size / 2, tile_size / 2)
 grid = True
 
-def convert(pos, translate=0):
-	return (pos[0]*tile_size + translate, pos[1]*tile_size + translate)
+def convert(pos: Vec2D, translate=0):
+	return list(pos * tile_size + Vec2D(translate, translate))
+
+def circle_boundary(pos: Vec2D, radius):
+	center = pos * tile_size + centering_vec
+	return list(center - Vec2D(radius, 2*radius)) + list(center + Vec2D(radius, 2*radius))
 
 def visualize(moves, width, height, show=False):
 	img = Image.new('RGB',
@@ -34,11 +40,11 @@ def visualize(moves, width, height, show=False):
 		draw.line([outw-1, 0, outw-1, outh], fill=gridline_color, width=1)
 		draw.line([0, outh-1, outw, outh-1], fill=gridline_color, width=1)
 	
-	pos = (0, 0)
+	pos = Vec2D(0, 0)
 	pen_down = False
 	for move in moves:
 		# print(move)
-		if type(move) is tuple: # it's a displacement
+		if type(move) is Vec2D: # it's a displacement
 			color = line_contact_color if pen_down else line_lifted_color
 			draw.line(convert(pos, pad) + convert(move, pad), fill=color, width=line_size)
 			pos = move
@@ -46,10 +52,10 @@ def visualize(moves, width, height, show=False):
 			match move:
 				case 'pen up':
 					pen_down = False
-					draw.arc(convert(pos, pad-dot_size) + convert(pos, pad+dot_size), -90, 90, fill=(255, 0, 0), width=15)
+					draw.arc(circle_boundary(pos, dot_size), 180, 0, fill=(255, 0, 0), width=15)
 				case 'pen down':
 					pen_down = True
-					draw.arc(convert(pos, pad-dot_size) + convert(pos, pad+dot_size), 90, -90, fill=(0, 255, 0), width=15)
+					draw.arc(circle_boundary(pos, dot_size), 0, 180, fill=(0, 255, 0), width=15)
 
 	if show: img.show()
 	now = datetime.now()
