@@ -11,6 +11,8 @@
 # draw that outline in one long stroke
 # remove the outline from plopchart
 # repeat
+# # with a limit on depth can act as contour drawing
+# # select continuous line vs distinct circles
 
 # algorithm (stripes):
 # pick the direction of the stripes
