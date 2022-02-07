@@ -2,6 +2,9 @@ from plopping import make_plopchart
 from navigating import longstroke
 from logger import log
 from datetime import datetime
+from visualiser import visualize
+
+# TODO flip the image in Y
 
 class Gcoder:
 	def __init__(self, settings: dict):
@@ -14,6 +17,8 @@ class Gcoder:
 		self.max_x = settings['x'][1]
 		self.min_y = settings['y'][0]
 		self.max_y = settings['y'][1]
+		self.vertical_force = settings['vertical_move_force']
+		self.horizontal_force = settings['horizontal_move_force']
 
 		self.header = f"""; I'm already Tracer {datetime.now().strftime('%d.%m.%Y %H-%M-%S')}
 M140 S0 ; Bed temperature
@@ -23,8 +28,7 @@ M107 ; No fan
 G92 E0 ; Reset Extruder
 G28 ; Home all axes
 G90 ; Set all axes to absolute
-G0 F1000 ; Set movement speed
-G1 Z{self.z_high} ; Lift the pen
+G0 F{self.vertical_force} Z{self.z_high} ; Lift the pen
 
 ; Drawing
 """
@@ -38,7 +42,7 @@ M84 ; Disable all steppers
 	def move(self, x, y):
 		out_x = x * self.tile_size + self.min_x
 		out_y = y * self.tile_size + self.min_y
-		self.code += f'G{1 if self.pen_down else 0} X{out_x} Y{out_y}\n'
+		self.code += f'G{1 if self.pen_down else 0} F{self.horizontal_force} X{out_x} Y{out_y}\n'
 
 		if out_x > self.max_x or out_y > self.max_y:
 			log(f'! TOO LARGE X/Y !: X:{x}->{out_x} Y:{y}->{out_y}', console=True)
@@ -46,11 +50,11 @@ M84 ; Disable all steppers
 
 	def lift(self):
 		self.pen_down = False
-		self.code += f'G0 Z{self.z_high}\n'
+		self.code += f'G0 F{self.vertical_force} Z{self.z_high}\n'
 
 	def dive(self):
 		self.pen_down = True
-		self.code += f'G1 Z{self.z_low}\n'
+		self.code += f'G1 F{self.vertical_force} Z{self.z_low}\n'
 
 	def encode(self, moves, save=False):
 		self.code = self.header
@@ -77,10 +81,10 @@ M84 ; Disable all steppers
 		return self.code
 
 if __name__ == '__main__':
-	plopchart = make_plopchart('data/smile.png', save=False, show=False)
+	plopchart = make_plopchart('data/mak.png', save=False, show=False)
 	moves = longstroke(plopchart)
 
-	# width, height = plopchart.size
+	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
 	# visualize(moves, width, height, show=False)
 
@@ -89,14 +93,16 @@ if __name__ == '__main__':
 	# Y: 75 - 220 
 	# Z: 0 - draw [5,10] - lifted
 	settings = {
-		'tile_size': 4,
-		'z_high': 7,
-		'z_low': 0,
+		'tile_size': 0.39,
+		'z_high': 20,
+		'z_low': 17,
 		'x': (0, 200),
 		'y': (75, 220),
+		'flat_move_force': 1000,
+		'vertical_move_force': 100
 	}
 
 	gcoder = Gcoder(settings)
 
-	gcode = gcoder.encode(moves, save='data/smile.gcode')
+	gcode = gcoder.encode(moves, save='data/mak.gcode')
 	# print(gcode)
