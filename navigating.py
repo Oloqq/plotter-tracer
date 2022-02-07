@@ -6,26 +6,29 @@
 # move back and forth lowering the pen wherever there is a dot 
 
 from turtle import Vec2D
-from typing_extensions import Self
-
+from enum import Enum
 from plopping import make_plopchart
+
+class Direction(Enum):
+	ORHTAGONAL = 1,
+	DIAGONAL = 2,
+	ORTHODIAGONAL = 3
 
 moves = []
 
-neighbor_mode = 'orthagonal'
-
 directions = {
-	'orthagonal': [(-1, 0), (1, 0), (0, -1), (0, 1)],
-	'diagonal': [(-1, -1), (1, -1), (1, 1), (-1, 1)],
+	Direction.ORHTAGONAL: [(-1, 0), (1, 0), (0, -1), (0, 1)],
+	Direction.DIAGONAL: [(-1, -1), (1, -1), (1, 1), (-1, 1)],
 }
-directions['orthodiag'] = directions['orthagonal'] + directions['diagonal']
+directions[Direction.ORTHODIAGONAL] = directions[Direction.ORHTAGONAL] + \
+                                      directions[Direction.DIAGONAL]
 
 class Node:
 	def __init__(self, x, y):
 		self.pos = Vec2D(x, y)
 		self.visited = False
 		self.neibs = {}
-		for d in directions['orthodiag']:
+		for d in directions[Direction.ORTHODIAGONAL]:
 			self.neibs[d] = None
 			
 
@@ -50,7 +53,7 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 # find longest uninterrupted orthagonal (todo: orthodiagonal) path from it
 # paint it try to repeat from the end spot, else pick a random new spot
 ## make diagonal moves
-def longstroke(img):
+def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 	(nodes, _) = make_nodes(img)
 	moves: list[Vec2D | str] = []
 	
@@ -134,6 +137,6 @@ if __name__ == "__main__":
 	height = 32
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
-	moves = longstroke(plopchart)
+	moves = longstroke(plopchart, Direction.ORTHODIAGONAL)
 	# print(moves)
 	visualiser.visualize(moves, width, height, show=True)
