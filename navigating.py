@@ -8,39 +8,35 @@
 from turtle import Vec2D
 from typing_extensions import Self
 
+from plopping import make_plopchart
+
 moves = []
 
 class Node:
 	def __init__(self, x, y):
 		self.pos = Vec2D(x, y)
 		self.visited = False
-		self.left = None
-		self.right = None
-		self.top = None
-		self.bottom = None
-
-	def __getitem__(self, key) -> Self | None:
-		match key:
-			case (-1, 0): return self.left
-			case (1, 0):  return self.right
-			case (0, -1): return self.top
-			case (0, 1):  return self.bottom
-			case _: raise KeyError
+		self.neibs = { # neighbors
+			(-1, 0): None,
+			(1, 0):  None,
+			(0, -1): None,
+			(0, 1):  None,
+		}
 			
 
 def check_direction(node: Node, direction: tuple[int, int]):
 	chain = 1
-	while node[direction] and not node[direction].visited:
+	while node.neibs[direction] and not node.neibs[direction].visited:
 		chain += 1
-		node = node[direction]
+		node = node.neibs[direction]
 	return chain
 
 # mark nodes in a direction of node as selected
 # additionaly, return position of the last node
 def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 	node.visited = True
-	while node[direction] and not node[direction].visited:
-		node = node[direction]
+	while node.neibs[direction] and not node.neibs[direction].visited:
+		node = node.neibs[direction]
 		node.visited = True
 	return node
 
@@ -48,6 +44,7 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 # pick an unpainted spot
 # find longest uninterrupted orthagonal (todo: orthodiagonal) path from it
 # paint it try to repeat from the end spot, else pick a random new spot
+## make diagonal moves
 def longstroke(img):
 	(nodes, _) = make_nodes(img)
 	moves: list[Vec2D | str] = []
@@ -95,24 +92,26 @@ def make_nodes(img):
 				nodemap[x][y] = node
 				# connect neighbors
 				if x > 0 and painted(pixels[x-1, y]):
-					nodemap[x-1][y].right = node
-					node.left = nodemap[x-1][y]
+					nodemap[x-1][y].neibs[1, 0] = node
+					node.neibs[-1, 0] = nodemap[x-1][y]
 				if y > 0 and painted(pixels[x, y-1]):
-					nodemap[x][y-1].bottom = node
-					node.top = nodemap[x][y-1]
+					nodemap[x][y-1].neibs[0, 1] = node
+					node.neibs[0, -1] = nodemap[x][y-1]
 	return nodes, nodemap
 
 
 # algorithm (closing circles):
-# get outline of the shape
+# get outline of the shape - outline <=> there is a white pixel next to a black one
 # draw that outline in one long stroke
 # remove the outline from plopchart
 # repeat
 # # with a limit on depth can act as contour drawing
 # # select continuous line vs distinct circles
-# def closing_circles(img):
-# 	(nodes, _) = make_nodes(img)
-# 	moves: list[tuple[int, int] | str] = []
+def closing_circles(img, limit=None, continuous=False):
+	(nodes, nodemap) = make_nodes(img)
+	moves: list[tuple[int, int] | str] = []
+
+	return moves
 
 
 from PIL import Image, ImageDraw
@@ -120,7 +119,8 @@ import visualiser
 if __name__ == "__main__":
 	width = 32
 	height = 32
-	img = Image.open('data/out.png')
-	moves = longstroke(img)
+	# img = Image.open('data/out.png')
+	plopchart = make_plopchart('data/banana.png', save=False, show=False)
+	moves = closing_circles(plopchart)
 	print(moves)
-	# visualiser.visualize(moves, width, height, show=True)
+	visualiser.visualize(moves, width, height, show=True)
