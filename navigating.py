@@ -6,31 +6,8 @@
 # move back and forth lowering the pen wherever there is a dot 
 
 from turtle import Vec2D
-from enum import Enum
 from plopping import make_plopchart
-
-class Direction(Enum):
-	ORHTAGONAL = 1,
-	DIAGONAL = 2,
-	ORTHODIAGONAL = 3
-
-moves = []
-
-directions = {
-	Direction.ORHTAGONAL: [(-1, 0), (1, 0), (0, -1), (0, 1)],
-	Direction.DIAGONAL: [(-1, -1), (1, -1), (1, 1), (-1, 1)],
-}
-directions[Direction.ORTHODIAGONAL] = directions[Direction.ORHTAGONAL] + \
-                                      directions[Direction.DIAGONAL]
-
-class Node:
-	def __init__(self, x, y):
-		self.pos = Vec2D(x, y)
-		self.visited = False
-		self.neibs = {}
-		for d in directions[Direction.ORTHODIAGONAL]:
-			self.neibs[d] = None
-			
+from navigation_types import Node, Direction, painted, directions
 
 def check_direction(node: Node, direction: tuple[int, int]):
 	chain = 1
@@ -83,9 +60,6 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 			moves.append(node.pos)
 			moves.append('pen down')
 	return moves
-
-def painted(pixel):
-	return pixel == 0 # black pixels are considered painted
 
 def make_nodes(img):
 	def meet(x, y, dx, dy): # makes a pair of nodes neighbors
