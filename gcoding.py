@@ -24,6 +24,7 @@ G92 E0 ; Reset Extruder
 G28 ; Home all axes
 G90 ; Set all axes to absolute
 G0 F1000 ; Set movement speed
+G1 Z{self.z_high} ; Lift the pen
 
 ; Drawing
 """
