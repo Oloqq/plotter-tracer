@@ -4,29 +4,19 @@
 
 # tuple[int, int] prolly should have its own Position class
 
-# figure out the size of the visualisation from the moves
-
-# algorithm (closing circles):
-# get outline of the shape
-# draw that outline in one long stroke
-# remove the outline from plopchart
-# repeat
-# # with a limit on depth can act as contour drawing
-# # select continuous line vs distinct circles
-
 # algorithm (stripes):
 # pick the direction of the stripes
 # start up of the plate
 # move back and forth lowering the pen wherever there is a dot 
 
+from turtle import Vec2D
 from typing_extensions import Self
 
 moves = []
 
 class Node:
 	def __init__(self, x, y):
-		self.x = x
-		self.y = y
+		self.pos = Vec2D(x, y)
 		self.visited = False
 		self.left = None
 		self.right = None
@@ -64,10 +54,10 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 # paint it try to repeat from the end spot, else pick a random new spot
 def longstroke(img):
 	(nodes, _) = make_nodes(img)
-	moves: list[tuple[int, int] | str] = []
+	moves: list[Vec2D | str] = []
 	
 	node = nodes.pop()
-	moves.append((node.x, node.y))
+	moves.append(node.pos)
 	moves.append('pen down')
 
 	while len(nodes) > 0:		
@@ -81,7 +71,7 @@ def longstroke(img):
 		endnode = mark_direction_visited(node, selected)
 
 		if longchain > 1: # there is an actual stroke
-			moves.append((endnode.x, endnode.y))
+			moves.append(endnode.pos)
 			node = endnode
 		elif longchain == 1: # this node is the only one getting painted
 			moves.append('pen up')
@@ -89,7 +79,7 @@ def longstroke(img):
 				node = nodes.pop()
 				if not node.visited: break
 			else: break
-			moves.append((node.x, node.y))
+			moves.append(node.pos)
 			moves.append('pen down')
 	return moves
 
@@ -116,5 +106,25 @@ def make_nodes(img):
 					node.top = nodemap[x][y-1]
 	return nodes, nodemap
 
+
+# algorithm (closing circles):
+# get outline of the shape
+# draw that outline in one long stroke
+# remove the outline from plopchart
+# repeat
+# # with a limit on depth can act as contour drawing
+# # select continuous line vs distinct circles
+# def closing_circles(img):
+# 	(nodes, _) = make_nodes(img)
+# 	moves: list[tuple[int, int] | str] = []
+
+
+from PIL import Image, ImageDraw
+import visualiser
 if __name__ == "__main__":
-	print('bruh')
+	width = 32
+	height = 32
+	img = Image.open('data/out.png')
+	moves = longstroke(img)
+	print(moves)
+	# visualiser.visualize(moves, width, height, show=True)

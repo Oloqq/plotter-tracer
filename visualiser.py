@@ -2,6 +2,8 @@ from PIL import Image, ImageDraw
 from navigating import longstroke
 from datetime import datetime
 
+# figure out the size of the visualisation from the moves
+
 line_contact_color = (128, 255, 255, 180)
 line_lifted_color = (255, 255, 128, 100)
 gridline_color = (0, 0, 0)
@@ -59,5 +61,5 @@ if __name__ == '__main__':
 	height = 32
 	img = Image.open('data/out.png')
 	moves = longstroke(img)
-	print(moves)
-	visualize(moves, width, height)
+	# print(moves)
+	visualize(moves, width, height, show=True)
