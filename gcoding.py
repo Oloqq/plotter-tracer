@@ -1,7 +1,7 @@
 from plopping import make_plopchart
 from navigating import longstroke
-from visualiser import visualize
 from logger import log
+from datetime import datetime
 
 class Gcoder:
 	def __init__(self, settings: dict):
@@ -15,7 +15,7 @@ class Gcoder:
 		self.min_y = settings['y'][0]
 		self.max_y = settings['y'][1]
 
-		self.header = """; I'm already Tracer
+		self.header = f"""; I'm already Tracer {datetime.now().strftime('%d.%m.%Y %H-%M-%S')}
 M140 S0 ; Bed temperature
 M104 S0 ; Hotend temperature
 M105 ; Report temperatures
