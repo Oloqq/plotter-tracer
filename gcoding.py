@@ -1,11 +1,7 @@
 from plopping import make_plopchart
 from navigating import longstroke
 from visualiser import visualize
-
-# coords scopes
-# X: 0 - 200
-# Y: 75 - 220 
-# Z: 0 - draw [5,10] - lifted
+from logger import log
 
 class Gcoder:
 	def __init__(self, settings: dict):
@@ -14,6 +10,11 @@ class Gcoder:
 		self.pen_down = False
 		self.z_high = settings['z_high']
 		self.z_low = settings['z_low']
+		self.min_x = settings['x'][0]
+		self.max_x = settings['x'][1]
+		self.min_y = settings['y'][0]
+		self.max_y = settings['y'][1]
+
 		self.header = """; I'm already Tracer
 M140 S0 ; Bed temperature
 M104 S0 ; Hotend temperature
@@ -34,9 +35,13 @@ M84 ; Disable all steppers
 """
 
 	def move(self, x, y):
-		self.code += f'G{1 if self.pen_down else 0} X{x*self.tile_size+50} Y{y*self.tile_size+100}\n'
-		if x*self.tile_size > 220 or y*self.tile_size > 220:
-			print(f'!LARGE X/Y!: X:{x} Y:{y}')
+		out_x = x * self.tile_size + self.min_x
+		out_y = y * self.tile_size + self.min_y
+		self.code += f'G{1 if self.pen_down else 0} X{out_x} Y{out_y}\n'
+
+		if out_x > self.max_x or out_y > self.max_y:
+			log(f'! TOO LARGE X/Y !: X:{x}->{out_x} Y:{y}->{out_y}', console=True)
+			log(f'! TOO LARGE X/Y !: max X:{self.max_x} max Y:{self.max_y}', console=True)
 
 	def lift(self):
 		self.pen_down = False
@@ -77,10 +82,17 @@ if __name__ == '__main__':
 	# width, height = plopchart.size
 	# the result is saved in data/visualiser_out
 	# visualize(moves, width, height, show=False)
+
+	# coords scopes
+	# X: 0 - 200
+	# Y: 75 - 220 
+	# Z: 0 - draw [5,10] - lifted
 	settings = {
 		'tile_size': 4,
-		'z_high': 5,
-		'z_low': 0
+		'z_high': 7,
+		'z_low': 0,
+		'x': (0, 200),
+		'y': (75, 220),
 	}
 
 	gcoder = Gcoder(settings)
