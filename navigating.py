@@ -1,6 +1,6 @@
 # this is a proof of concept navigator, I plan to do a better one in the future
 
-# algorithm (stripes):
+# algorithm (stripes): continuous Z movement gets the motor really hot so idk if its a good idea
 # pick the direction of the stripes
 # start up of the plate
 # move back and forth lowering the pen wherever there is a dot 
@@ -9,6 +9,7 @@ from turtle import Vec2D
 from plopping import make_plopchart
 from navigation_types import Node, Direction, painted, directions
 
+# check how many nodes can be painted in a given direction from a node
 def check_direction(node: Node, direction: tuple[int, int]):
 	chain = 1
 	while node.neibs[direction] and not node.neibs[direction].visited:

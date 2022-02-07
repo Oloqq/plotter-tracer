@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
 	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
-	# visualize(moves, width, height, show=False)
+	visualize(moves, width, height, show=False)
 
 	# coords scopes
 	# X: 0 - 200
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 		'z_low': 17,
 		'x': (0, 200),
 		'y': (75, 220),
-		'flat_move_force': 1000,
+		'horizontal_move_force': 1000,
 		'vertical_move_force': 100
 	}
 
