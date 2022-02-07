@@ -12,16 +12,21 @@ from plopping import make_plopchart
 
 moves = []
 
+neighbor_mode = 'orthagonal'
+
+directions = {
+	'orthagonal': [(-1, 0), (1, 0), (0, -1), (0, 1)],
+	'diagonal': [(-1, -1), (1, -1), (1, 1), (-1, 1)],
+}
+directions['orthodiag'] = directions['orthagonal'] + directions['diagonal']
+
 class Node:
 	def __init__(self, x, y):
 		self.pos = Vec2D(x, y)
 		self.visited = False
-		self.neibs = { # neighbors
-			(-1, 0): None,
-			(1, 0):  None,
-			(0, -1): None,
-			(0, 1):  None,
-		}
+		self.neibs = {}
+		for d in directions['orthodiag']:
+			self.neibs[d] = None
 			
 
 def check_direction(node: Node, direction: tuple[int, int]):
@@ -56,7 +61,7 @@ def longstroke(img):
 	while len(nodes) > 0:		
 		longchain = 0
 		selected = (0, 0)
-		for direction in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+		for direction in directions[neighbor_mode]:
 			chain = check_direction(node, direction)
 			if chain > longchain:
 				longchain = chain
@@ -80,6 +85,10 @@ def painted(pixel):
 	return pixel == 0 # black pixels are considered painted
 
 def make_nodes(img):
+	def meet(x, y, dx, dy): # makes a pair of nodes neighbors
+		nodemap[x+dx][y+dy].neibs[-dx, -dy] = node
+		node.neibs[dx, dy] = nodemap[x+dx][y+dy]
+
 	pixels = img.load()
 	width, height = img.size
 	nodemap: list[list[Node]] = [[None for _ in range(height)] for _ in range(width)]
@@ -91,12 +100,16 @@ def make_nodes(img):
 				nodes.append(node)
 				nodemap[x][y] = node
 				# connect neighbors
-				if x > 0 and painted(pixels[x-1, y]):
-					nodemap[x-1][y].neibs[1, 0] = node
-					node.neibs[-1, 0] = nodemap[x-1][y]
-				if y > 0 and painted(pixels[x, y-1]):
-					nodemap[x][y-1].neibs[0, 1] = node
-					node.neibs[0, -1] = nodemap[x][y-1]
+				if x > 0: 
+					if painted(pixels[x-1, y]):
+						meet(x, y, -1, 0)
+					if y > 0 and painted(pixels[x-1, y-1]):
+						meet(x, y, -1, -1)
+					if y < height and painted(pixels[x-1, y+1]):
+						meet(x, y, -1, 1)
+				if y > 0:
+					if painted(pixels[x, y-1]):
+						meet(x, y, 0, -1)
 	return nodes, nodemap
 
 
@@ -121,6 +134,6 @@ if __name__ == "__main__":
 	height = 32
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
-	moves = closing_circles(plopchart)
-	print(moves)
+	moves = longstroke(plopchart)
+	# print(moves)
 	visualiser.visualize(moves, width, height, show=True)
