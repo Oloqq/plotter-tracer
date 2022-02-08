@@ -45,11 +45,11 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 	while len(nodes) > 0:		
 		longchain = 0
 		selected = (0, 0)
-		for direction in directions[neighbor_mode]:
-			chain = check_direction(node, direction)
+		for reverse in directions[neighbor_mode]:
+			chain = check_direction(node, reverse)
 			if chain > longchain:
 				longchain = chain
-				selected = direction
+				selected = reverse
 		endnode = mark_direction_visited(node, selected)
 
 		if longchain > 1: # there is an actual stroke
@@ -67,17 +67,25 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 	# figure out the order of drawing
 	def distance(left: Vec2D, right: Vec2D):
 		return math.sqrt((left - right) * (left - right))
+
 	moves: list[Vec2D | str] = []
 	toolhead = Vec2D(0, 0)
 	while len(paths) > 0:
 		min_dist = 1000000
 		chosen = None
+		reverse = False
 		for path in paths:
 			d = distance(toolhead, path[0])
 			if d < min_dist:
 				min_dist = d
 				chosen = path
+			d = distance(toolhead, path[-1])
+			if d < min_dist:
+				min_dist = d
+				chosen = path
+				reverse = True
 		paths.remove(chosen)
+		if reverse: chosen.reverse()
 		toolhead = chosen[-1]
 		moves.append(chosen[0])
 		moves.append('pen down')
