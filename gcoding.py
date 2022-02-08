@@ -1,3 +1,4 @@
+from turtle import Vec2D
 from plopping import make_plopchart
 from navigating import longstroke
 from logger import log
@@ -61,9 +62,8 @@ M84 ; Disable all steppers
 		
 		self.pen_down = False
 		for step in moves:
-			# print(step)
-			if type(step) is tuple: # it's a displacement
-				x, y = step
+			if type(step) is Vec2D: # it's a displacement
+				x, y = list(step)
 				self.move(x, y)
 			elif type(step) is str: # it's a non-displacement operation 
 				match step:
@@ -94,8 +94,8 @@ if __name__ == '__main__':
 	# Z: 0 - draw [5,10] - lifted
 	settings = {
 		'tile_size': 0.39,
-		'z_high': 20,
-		'z_low': 17,
+		'z_high': 17,
+		'z_low': 14,
 		'x': (0, 200),
 		'y': (75, 220),
 		'horizontal_move_force': 1000,
