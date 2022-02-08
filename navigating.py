@@ -5,6 +5,8 @@
 # start up of the plate
 # move back and forth lowering the pen wherever there is a dot 
 
+from functools import reduce
+import math
 from turtle import Vec2D
 from plopping import make_plopchart
 from navigation_types import Node, Direction, painted, directions
@@ -28,17 +30,18 @@ def mark_direction_visited(node: Node, direction: tuple[int, int]) -> Node:
 
 # algorithm (longstroke):
 # pick an unpainted spot
-# find longest uninterrupted orthagonal (todo: orthodiagonal) path from it
-# paint it try to repeat from the end spot, else pick a random new spot
-## make diagonal moves
+# find longest uninterrupted orthodiagonal stroke from it
+# repeat until all nodes are in a path
+# find a way to draw all the paths asap
 def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 	(nodes, _) = make_nodes(img)
-	moves: list[Vec2D | str] = []
+	paths = []
 	
+	# find all the paths
 	node = nodes.pop()
-	moves.append(node.pos)
-	moves.append('pen down')
-
+	paths.append([])
+	path = paths[len(paths) - 1]
+	path.append(node.pos)
 	while len(nodes) > 0:		
 		longchain = 0
 		selected = (0, 0)
@@ -50,16 +53,38 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 		endnode = mark_direction_visited(node, selected)
 
 		if longchain > 1: # there is an actual stroke
-			moves.append(endnode.pos)
+			path.append(endnode.pos)
 			node = endnode
 		elif longchain == 1: # this node is the only one getting painted
-			moves.append('pen up')
 			while len(nodes) > 0:
 				node = nodes.pop()
 				if not node.visited: break
 			else: break
-			moves.append(node.pos)
-			moves.append('pen down')
+			paths.append([])
+			path = paths[len(paths) - 1]
+			path.append(node.pos)			
+	
+	# figure out the order of drawing
+	def distance(left: Vec2D, right: Vec2D):
+		return math.sqrt((left - right) * (left - right))
+	moves: list[Vec2D | str] = []
+	toolhead = Vec2D(0, 0)
+	while len(paths) > 0:
+		min_dist = 1000000
+		chosen = None
+		for path in paths:
+			d = distance(toolhead, path[0])
+			if d < min_dist:
+				min_dist = d
+				chosen = path
+		paths.remove(chosen)
+		toolhead = chosen[-1]
+		moves.append(chosen[0])
+		moves.append('pen down')
+		for i in range(1, len(chosen)):
+			moves.append(chosen[i])
+		moves.append('pen up')
+
 	return moves
 
 def make_nodes(img):
@@ -113,5 +138,5 @@ if __name__ == "__main__":
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
 	moves = longstroke(plopchart, Direction.ORTHODIAGONAL)
-	# print(moves)
+	print(moves)
 	visualiser.visualize(moves, width, height, show=True)
