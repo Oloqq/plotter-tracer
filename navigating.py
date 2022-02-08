@@ -68,6 +68,7 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 	def distance(left: Vec2D, right: Vec2D):
 		return math.sqrt((left - right) * (left - right))
 
+	# TODO there's no need do lift the pen if the next point is right next to the tool
 	moves: list[Vec2D | str] = []
 	toolhead = Vec2D(0, 0)
 	while len(paths) > 0:
@@ -79,6 +80,7 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 			if d < min_dist:
 				min_dist = d
 				chosen = path
+				reverse = False
 			d = distance(toolhead, path[-1])
 			if d < min_dist:
 				min_dist = d
