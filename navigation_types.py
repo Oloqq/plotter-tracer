@@ -38,7 +38,6 @@ class Node:
 			return (0, None)
 		if len(neibs) == 1:
 			return (1, neibs[0])
-
 		ret = {}
 		for neib in neibs:
 			l = len(neib.neibs_in(control))
