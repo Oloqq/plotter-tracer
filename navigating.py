@@ -6,6 +6,7 @@
 # move back and forth lowering the pen wherever there is a dot 
 
 from functools import reduce
+import functools
 import math
 from turtle import Vec2D
 from plopping import make_plopchart
@@ -137,12 +138,56 @@ def make_nodes(img):
 def closing_circles(img, limit=None, continuous=False):
 	def is_outline(node: Node):
 		for d in directions[Direction.ORTHAGONAL]:
-			if nodemap[node.pos + d] is None:
+			if node.pos + d not in nodemap:
 				return True
 		return False
 
+	def peel(nodes: list[Node]):
+		outline = []
+		inside = []
+		for node in nodes:
+			if is_outline(node):
+				outline.append(node)
+			else:
+				inside.append(node)
+		return outline, nodes
+
+	def trace_outline(outline: list[Node]):
+		current = outline.pop()
+		moves.append(current.pos)
+		moves.append('pen down')
+		# print(len(outline))
+		while len(outline) > 0:
+			available, neighborhood = current.neighborhood(outline)
+			match available:
+				case 0:
+					if len(outline) == 0:
+						return
+					current = outline.pop()
+					moves.append('pen up')
+					moves.append(current.pos)
+					moves.append('pen down')
+					break
+				case 1:
+					current = neighborhood
+				case _: # choose the one with least connections
+					print(available, current.pos)
+					least = 10 # max neighbors in outline is 7
+					chosen = None
+					for neib, his_neibs in neighborhood.items():
+						if his_neibs < least:
+							least = his_neibs
+							chosen = neib
+					current = chosen
+					outline.remove(current)
+			moves.append(current.pos)
+
 	(nodes, nodemap) = make_nodes(img)
 	moves: list[tuple[int, int] | str] = []
+
+	while len(nodes) > 0:
+		outline, nodes = peel(nodes)
+		trace_outline(outline)
 
 	return moves
 
@@ -154,6 +199,6 @@ if __name__ == "__main__":
 	height = 32
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
-	moves = longstroke(plopchart, Direction.ORTHODIAGONAL)
-	print(moves)
+	moves = closing_circles(plopchart, Direction.ORTHODIAGONAL)
+	# print(moves)
 	visualiser.visualize(moves, width, height, show=True)
