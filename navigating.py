@@ -225,5 +225,6 @@ if __name__ == "__main__":
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
 	moves = closing_circles(plopchart)
+	# moves = squiggler(plopchart)
 	# print(moves)
 	visualiser.visualize(moves, width, height, show=True)

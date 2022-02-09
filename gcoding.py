@@ -1,6 +1,6 @@
 from turtle import Vec2D
 from plopping import make_plopchart
-from navigating import longstroke
+from navigating import closing_circles, longstroke, squiggler
 from logger import log
 from datetime import datetime
 from visualiser import visualize
@@ -82,7 +82,7 @@ M84 ; Disable all steppers
 
 if __name__ == '__main__':
 	plopchart = make_plopchart('data/mak.png', save=False, show=False)
-	moves = longstroke(plopchart)
+	moves = closing_circles(plopchart)
 
 	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
