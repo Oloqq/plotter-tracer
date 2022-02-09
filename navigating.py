@@ -127,22 +127,29 @@ def make_nodes(img):
 						meet(x, y, 0, -1)
 	return nodes, nodemap
 
+# algorithm (squiggler):
+# perform closing circles but don't use a buffer when updating nodemap
+# the result is very long, continuous but squiggly lines 
+def squiggler(img):
+	return closing_circles(img, peel_in_place=True)
 
 # algorithm (closing circles):
 # get outline of the shape - outline <=> there is a white pixel next to a black one
-# draw that outline in one long stroke
+# draw that outline in a few long strokes
 # remove the outline from plopchart
 # repeat
 # # with a limit on depth can act as contour drawing
 # # select continuous line vs distinct circles
-def closing_circles(img, limit=None, continuous=False):
+def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 	def is_outline(node: Node):
+		nonlocal nodemap
 		for d in directions[Direction.ORTHAGONAL]:
 			if node.pos + d not in nodemap:
 				return True
 		return False
 
-	def peel(nodes: list[Node]):
+	def peel_in_place_f(nodes: list[Node], nodemap: dict[Vec2D, Node]) \
+		-> tuple[list[Node], list[Node], dict[Vec2D, Node]]:
 		outline = []
 		inside = []
 		for node in nodes:
@@ -151,7 +158,21 @@ def closing_circles(img, limit=None, continuous=False):
 				nodemap.pop(node.pos)
 			else:
 				inside.append(node)
-		return outline, inside
+		return outline, inside, nodemap
+
+	def peel(nodes: list[Node], nodemap: dict[Vec2D, Node]) \
+		-> tuple[list[Node], list[Node], dict[Vec2D, Node]]:
+		outline = []
+		inside = []
+		newnodemap = nodemap.copy()
+		for node in nodes:
+			if is_outline(node):
+				outline.append(node)
+				newnodemap.pop(node.pos)
+			else:
+				inside.append(node)
+		nodemap = newnodemap
+		return outline, inside, nodemap
 
 	def trace_outline(outline: list[Node]):
 		current = outline.pop()
@@ -184,12 +205,14 @@ def closing_circles(img, limit=None, continuous=False):
 					outline.remove(current)
 			moves.append(current.pos)
 
+	if peel_in_place:
+		peel = peel_in_place_f
 	(nodes, nodemap) = make_nodes(img)
 	moves: list[tuple[int, int] | str] = []
 
 	while len(nodes) > 0:
 		print(len(nodes))
-		outline, nodes = peel(nodes)
+		outline, nodes, nodemap = peel(nodes, nodemap)
 		print(len(nodes))
 		# print(len(outline), len(nodes))
 		if len(outline) > 0:
@@ -209,6 +232,6 @@ if __name__ == "__main__":
 	height = 32
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/banana.png', save=False, show=False)
-	moves = closing_circles(plopchart, Direction.ORTHODIAGONAL)
+	moves = closing_circles(plopchart)
 	# print(moves)
 	visualiser.visualize(moves, width, height, show=True)
