@@ -178,9 +178,7 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 		current = outline.pop()
 		moves.append(current.pos)
 		moves.append('pen down')
-		# print(len(outline))
 		while len(outline) > 0:
-			# print(len(outline))
 			available, neighborhood = current.neighborhood(outline)
 			match available:
 				case 0:
@@ -194,7 +192,6 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 					current = neighborhood
 					outline.remove(current)
 				case _: # choose the one with least connections
-					# print(available, current.pos)
 					least = 10 # max neighbors in outline is 7
 					chosen = None
 					for neib, his_neibs in neighborhood.items():
@@ -211,16 +208,11 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 	moves: list[tuple[int, int] | str] = []
 
 	while len(nodes) > 0:
-		print(len(nodes))
 		outline, nodes, nodemap = peel(nodes, nodemap)
-		print(len(nodes))
-		# print(len(outline), len(nodes))
 		if len(outline) > 0:
-			print('trace')
 			trace_outline(outline)
 		else:
 			break
-	# print(nodes)
 
 	return moves
 
