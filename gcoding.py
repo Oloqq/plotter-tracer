@@ -94,7 +94,7 @@ if __name__ == '__main__':
 	# Z: 0 - draw [5,10] - lifted
 	settings = {
 		'tile_size': 0.39,
-		'z_high': 17,
+		'z_high': 19,
 		'z_low': 14,
 		'x': (0, 200),
 		'y': (75, 220),
