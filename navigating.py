@@ -100,19 +100,19 @@ def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 
 def make_nodes(img):
 	def meet(x, y, dx, dy): # makes a pair of nodes neighbors
-		nodemap[x+dx][y+dy].neibs[-dx, -dy] = node
-		node.neibs[dx, dy] = nodemap[x+dx][y+dy]
+		nodemap[x+dx, y+dy].neibs[-dx, -dy] = node
+		node.neibs[dx, dy] = nodemap[x+dx, y+dy]
 
 	pixels = img.load()
 	width, height = img.size
-	nodemap: list[list[Node]] = [[None for _ in range(height)] for _ in range(width)]
+	nodemap: dict[Vec2D, Node] = {}
 	nodes: list[Node] = []
 	for x in range(width):
 		for y in range(height):
 			if painted(pixels[x, y]):
 				node = Node(x, y)
 				nodes.append(node)
-				nodemap[x][y] = node
+				nodemap[x, y] = node
 				# connect neighbors
 				if x > 0: 
 					if painted(pixels[x-1, y]):
@@ -135,6 +135,9 @@ def make_nodes(img):
 # # with a limit on depth can act as contour drawing
 # # select continuous line vs distinct circles
 def closing_circles(img, limit=None, continuous=False):
+	def is_outline(node: Node):
+		return False
+
 	(nodes, nodemap) = make_nodes(img)
 	moves: list[tuple[int, int] | str] = []
 
