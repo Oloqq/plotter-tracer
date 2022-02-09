@@ -136,6 +136,9 @@ def make_nodes(img):
 # # select continuous line vs distinct circles
 def closing_circles(img, limit=None, continuous=False):
 	def is_outline(node: Node):
+		for d in directions[Direction.ORTHAGONAL]:
+			if nodemap[node.pos + d] is None:
+				return True
 		return False
 
 	(nodes, nodemap) = make_nodes(img)

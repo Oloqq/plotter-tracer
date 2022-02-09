@@ -5,15 +5,15 @@ def painted(pixel):
 	return pixel == 0 # black pixels are considered painted
 
 class Direction(Enum):
-	ORHTAGONAL = 1,
+	ORTHAGONAL = 1,
 	DIAGONAL = 2,
 	ORTHODIAGONAL = 3
 
 directions = {
-	Direction.ORHTAGONAL: [(-1, 0), (1, 0), (0, -1), (0, 1)],
+	Direction.ORTHAGONAL: [(-1, 0), (1, 0), (0, -1), (0, 1)],
 	Direction.DIAGONAL: [(-1, -1), (1, -1), (1, 1), (-1, 1)],
 }
-directions[Direction.ORTHODIAGONAL] = directions[Direction.ORHTAGONAL] + \
+directions[Direction.ORTHODIAGONAL] = directions[Direction.ORTHAGONAL] + \
                                       directions[Direction.DIAGONAL]
 
 class Node:
