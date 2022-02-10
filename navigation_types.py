@@ -41,7 +41,6 @@ class Node:
 		ret = {}
 		for neib in neibs:
 			l = len(neib.neibs_in(control))
-			if l > 0:
-				ret[neib] = l
+			ret[neib] = l
 
 		return (len(neibs), ret)

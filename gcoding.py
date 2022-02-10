@@ -82,11 +82,11 @@ M84 ; Disable all steppers
 
 if __name__ == '__main__':
 	plopchart = make_plopchart('data/mak.png', save=False, show=False)
-	moves = closing_circles(plopchart)
+	moves = squiggler(plopchart)
 
 	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
-	visualize(moves, width, height, show=False)
+	visualize(moves, width, height, show=True)
 
 	# coords scopes
 	# X: 0 - 200

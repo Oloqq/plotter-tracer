@@ -140,6 +140,11 @@ def squiggler(img):
 # repeat
 # # with a limit on depth can act as contour drawing
 # # select continuous line vs distinct circles
+# TODO needs optimalization (of both output and algorithm itself)
+# for output: start new line near the end of previous one
+# do not lift the pen when unnecessary
+# for working: when creating outline make new list of nodes to check from
+# nodes met in the iteration 
 def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 	def is_outline(node: Node):
 		nonlocal nodemap
@@ -194,11 +199,14 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 				case _: # choose the one with least connections
 					least = 10 # max neighbors in outline is 7
 					chosen = None
+					# print('search start', available, len(neighborhood.items()))
 					for neib, his_neibs in neighborhood.items():
 						if his_neibs < least:
 							least = his_neibs
 							chosen = neib
+							# print('new chosen', chosen, least)
 					current = chosen
+					# print('done', current, least)
 					outline.remove(current)
 			moves.append(current.pos)
 
@@ -216,15 +224,12 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 
 	return moves
 
-
-from PIL import Image, ImageDraw
 import visualiser
 if __name__ == "__main__":
-	width = 32
-	height = 32
 	# img = Image.open('data/out.png')
-	plopchart = make_plopchart('data/banana.png', save=False, show=False)
+	plopchart = make_plopchart('data/mak.png', save=False, show=False)
 	moves = closing_circles(plopchart)
 	# moves = squiggler(plopchart)
 	# print(moves)
+	width, height = plopchart.size
 	visualiser.visualize(moves, width, height, show=True)
