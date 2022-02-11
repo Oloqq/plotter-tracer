@@ -12,6 +12,7 @@ from plopping import make_plopchart
 # from navigation_types import Node, Direction, painted, directions
 from navigation_types import *
 from logger import log
+from analyser import analyse
 
 # check how many nodes can be painted in a given direction from a node
 def check_direction(node: Node, direction: tuple[int, int]):
@@ -218,10 +219,12 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 					moves.append('pen up')
 					moves.append(current.pos)
 					moves.append('pen down')
+					# continue
 				case 1:
 					current = neighborhood
 					outline.remove(current)
 				case _: # choose the leftmost one, then the topmost
+					# current = prioritize_loneliest(neighborhood)
 					current = prioritize_lefttop(neighborhood)
 					outline.remove(current)
 			moves.append(current.pos)
@@ -245,7 +248,7 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 
 		# log(f'Merging', console=True)
 
-		break # TEMP testing on just one layer
+		# break # TEMP testing on just one layer
 
 	return moves
 
@@ -254,6 +257,8 @@ if __name__ == "__main__":
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/mak.png', save=False, show=False)
 	moves = closing_circles(plopchart)
+	log(analyse(moves), console=True)
+
 	# moves = squiggler(plopchart)
 	# print(moves)
 	width, height = plopchart.size
