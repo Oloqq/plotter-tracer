@@ -9,7 +9,8 @@ from functools import reduce
 import math
 from turtle import Vec2D
 from plopping import make_plopchart
-from navigation_types import Node, Direction, painted, directions
+# from navigation_types import Node, Direction, painted, directions
+from navigation_types import *
 from logger import log
 
 # check how many nodes can be painted in a given direction from a node
@@ -180,6 +181,30 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 		return outline, inside, nodemap
 
 	def trace_outline(outline: list[Node]):
+		def prioritize_loneliest(nodes):
+			least = 10 # max neighbors in outline is 7
+			chosen = None
+			# print('search start', available, len(neighborhood.items()))
+			for neib, his_neibs in nodes.items():
+				if his_neibs < least:
+					least = his_neibs
+					chosen = neib
+					# print('new chosen', chosen, least)
+			return chosen
+
+		def prioritize_lefttop(nodes):
+			fitness = Vec2D(10000000, 10000000)
+			chosen = None
+			for node, its_neibs in nodes.items():
+				if node.pos[0] < fitness[0]:
+					chosen = node
+					fitness = node.pos
+				elif node.pos[0] == fitness[0]:
+					if node.pos[1] < fitness[1]:
+						chosen = node
+						fitness = node.pos
+			return chosen
+
 		current = outline.pop()
 		moves.append(current.pos)
 		moves.append('pen down')
@@ -196,17 +221,8 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 				case 1:
 					current = neighborhood
 					outline.remove(current)
-				case _: # choose the one with least connections
-					least = 10 # max neighbors in outline is 7
-					chosen = None
-					# print('search start', available, len(neighborhood.items()))
-					for neib, his_neibs in neighborhood.items():
-						if his_neibs < least:
-							least = his_neibs
-							chosen = neib
-							# print('new chosen', chosen, least)
-					current = chosen
-					# print('done', current, least)
+				case _: # choose the leftmost one, then the topmost
+					current = prioritize_lefttop(neighborhood)
 					outline.remove(current)
 			moves.append(current.pos)
 
@@ -222,9 +238,14 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 		peels += 1
 		log(f'Peel {peels} finished. Outline size: {len(outline)}. Remaining: {len(nodes)}', console=True)
 		if len(outline) > 0:
+			log(f'Tracing', console=True)
 			trace_outline(outline)
 		else:
 			break
+
+		# log(f'Merging', console=True)
+
+		break # TEMP testing on just one layer
 
 	return moves
 

@@ -6,14 +6,14 @@ from datetime import datetime
 # figure out the size of the visualisation from the moves
 
 line_contact_color = (128, 255, 255, 180)
-# line_lifted_color = (255, 255, 128, 100)
-line_lifted_color = (255, 255, 128, 0)
+line_lifted_color = (255, 255, 128, 100)
+# line_lifted_color = (255, 255, 128, 0)
 gridline_color = (0, 0, 0)
 bg_color = (87, 87, 87)
 
-dot_size = 8
-line_size = 10
-tile_size = 50
+dot_size = 2
+line_size = 4
+tile_size = 10
 pad = tile_size / 2
 centering_vec = Vec2D(tile_size / 2, tile_size / 2)
 grid = True
