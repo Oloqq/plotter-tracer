@@ -6,7 +6,8 @@ from datetime import datetime
 # figure out the size of the visualisation from the moves
 
 line_contact_color = (128, 255, 255, 180)
-line_lifted_color = (255, 255, 128, 100)
+# line_lifted_color = (255, 255, 128, 100)
+line_lifted_color = (255, 255, 128, 0)
 gridline_color = (0, 0, 0)
 bg_color = (87, 87, 87)
 
