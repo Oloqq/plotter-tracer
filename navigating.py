@@ -6,11 +6,11 @@
 # move back and forth lowering the pen wherever there is a dot 
 
 from functools import reduce
-import functools
 import math
 from turtle import Vec2D
 from plopping import make_plopchart
 from navigation_types import Node, Direction, painted, directions
+from logger import log
 
 # check how many nodes can be painted in a given direction from a node
 def check_direction(node: Node, direction: tuple[int, int]):
@@ -215,8 +215,12 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 	(nodes, nodemap) = make_nodes(img)
 	moves: list[tuple[int, int] | str] = []
 
+	log('Peeling')
+	peels = 0
 	while len(nodes) > 0:
 		outline, nodes, nodemap = peel(nodes, nodemap)
+		peels += 1
+		log(f'Peel {peels} finished. Outline size: {len(outline)}. Remaining: {len(nodes)}', console=True)
 		if len(outline) > 0:
 			trace_outline(outline)
 		else:
@@ -232,4 +236,5 @@ if __name__ == "__main__":
 	# moves = squiggler(plopchart)
 	# print(moves)
 	width, height = plopchart.size
-	visualiser.visualize(moves, width, height, show=True)
+	print('Starting visualiser')
+	visualiser.visualize(moves, width, height, show=False)

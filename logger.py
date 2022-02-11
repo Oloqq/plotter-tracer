@@ -8,7 +8,9 @@ latest_log = io.open('latest_log.txt', 'w', encoding='utf-8')
 def log(*args, console=False):
 	if console:
 		print(*args)
-		
+
+	log_file.write(f'[{datetime.now().strftime("%d.%m.%Y %H-%M-%S")}] ')
+	latest_log.write(f'[{datetime.now().strftime("%d.%m.%Y %H-%M-%S")}] ')	
 	for arg in args:
 		arg = str(arg)
 		log_file.write(arg + ' ')

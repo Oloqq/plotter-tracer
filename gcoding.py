@@ -6,6 +6,7 @@ from datetime import datetime
 from visualiser import visualize
 
 # TODO flip the image in Y
+# TODO add option to draw a rectangle around the workspace
 
 class Gcoder:
 	def __init__(self, settings: dict):
@@ -86,7 +87,7 @@ if __name__ == '__main__':
 
 	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
-	visualize(moves, width, height, show=True)
+	# visualize(moves, width, height, show=True)
 
 	# coords scopes
 	# X: 0 - 200
@@ -94,9 +95,9 @@ if __name__ == '__main__':
 	# Z: 0 - draw [5,10] - lifted
 	settings = {
 		'tile_size': 0.39,
-		'z_high': 19,
-		'z_low': 14,
-		'x': (0, 200),
+		'z_high': 12,
+		'z_low': 8,
+		'x': (65, 200),
 		'y': (75, 220),
 		'horizontal_move_force': 1000,
 		'vertical_move_force': 100
