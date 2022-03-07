@@ -1,5 +1,3 @@
-# this is a proof of concept navigator, I plan to do a better one in the future
-
 # algorithm (stripes): continuous Z movement gets the motor really hot so idk if its a good idea
 # pick the direction of the stripes
 # start up of the plate
@@ -122,7 +120,7 @@ def make_nodes(img):
 						meet(x, y, -1, 0)
 					if y > 0 and painted(pixels[x-1, y-1]):
 						meet(x, y, -1, -1)
-					if y < height and painted(pixels[x-1, y+1]):
+					if y < height-1 and painted(pixels[x-1, y+1]):
 						meet(x, y, -1, 1)
 				if y > 0:
 					if painted(pixels[x, y-1]):
@@ -210,7 +208,7 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 		moves.append(current.pos)
 		moves.append('pen down')
 		while len(outline) > 0:
-			available, neighborhood = current.neighborhood(outline)
+			available, neighborhood = current.neighborhood(outline) # when using lefttop this function could be much simpler
 			match available:
 				case 0:
 					if len(outline) == 0:
@@ -224,8 +222,8 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 					current = neighborhood
 					outline.remove(current)
 				case _: # choose the leftmost one, then the topmost
-					# current = prioritize_loneliest(neighborhood)
-					current = prioritize_lefttop(neighborhood)
+					current = prioritize_loneliest(neighborhood)
+					# current = prioritize_lefttop(neighborhood)
 					outline.remove(current)
 			moves.append(current.pos)
 
@@ -248,7 +246,7 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 
 		# log(f'Merging', console=True)
 
-		# break # TEMP testing on just one layer
+		break # TEMP testing on just one layer
 
 	return moves
 
@@ -256,10 +254,10 @@ import visualiser
 if __name__ == "__main__":
 	# img = Image.open('data/out.png')
 	plopchart = make_plopchart('data/mak.png', save=False, show=False)
-	moves = closing_circles(plopchart)
+	# moves = closing_circles(plopchart)
+	moves = squiggler(plopchart)
 	log(analyse(moves), console=True)
 
-	# moves = squiggler(plopchart)
 	# print(moves)
 	width, height = plopchart.size
 	print('Starting visualiser')

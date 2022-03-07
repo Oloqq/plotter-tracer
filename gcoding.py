@@ -82,28 +82,39 @@ M84 ; Disable all steppers
 		return self.code
 
 if __name__ == '__main__':
-	plopchart = make_plopchart('data/mak.png', save=False, show=False)
+	plopchart = make_plopchart('data/bruh_out.png', save=False, show=False)
 	moves = squiggler(plopchart)
 
 	width, height = plopchart.size
 	# the result is saved in data/visualiser_out
 	# visualize(moves, width, height, show=True)
 
-	# coords scopes
-	# X: 0 - 200
-	# Y: 75 - 220 
-	# Z: 0 - draw [5,10] - lifted
+	# TODO make a class containing moves with a method to compile it to gcode
+	# TODO add option to not home for some unregular surfaces / initial rise + setting working surface
+	# TODO option to mirror the image - important for text
+
+	# settings = {
+	# 	'tile_size': 0.39,
+	# 	'z_high': 9,
+	# 	'z_low': 5,
+	# 	'x': (60, 220),
+	# 	'y': (50, 220),
+	# 	'horizontal_move_force': 1000,
+	# 	'vertical_move_force': 100
+	# }
+
+	
 	settings = {
-		'tile_size': 0.39,
-		'z_high': 12,
-		'z_low': 8,
-		'x': (65, 200),
-		'y': (75, 220),
-		'horizontal_move_force': 1000,
-		'vertical_move_force': 100
+		'tile_size': 0.3,
+		'z_high': 21,
+		'z_low': 17,
+		'x': (150, 220),
+		'y': (4, 220),
+		'horizontal_move_force': 500,
+		'vertical_move_force': 200
 	}
 
 	gcoder = Gcoder(settings)
 
-	gcode = gcoder.encode(moves, save='data/mak.gcode')
+	gcode = gcoder.encode(moves, save='data/bruho.gcode')
 	# print(gcode)
