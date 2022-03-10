@@ -1,11 +1,11 @@
 from ccli import CCLI
-from gcoding import sample_configuation
+from configuration import PlotterConfiguration
 import json
 import sys
 from os import path
 
 ccli = CCLI()
-conf = sample_configuation.copy()
+conf = PlotterConfiguration()
 
 def select_input(args: list[str]):
     if type(args) != list or len(args) < 2:
@@ -13,9 +13,10 @@ def select_input(args: list[str]):
         return
     filepath = args[1]
     if not path.exists(filepath):
-        print(f'file not found {filepath}')
+        print(f'file not found: {filepath}')
+        return
 
-    conf['input'] = filepath
+    conf.input_path = filepath
     print(f'Input file set to {filepath}')
 
 

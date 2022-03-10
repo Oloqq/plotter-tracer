@@ -6,17 +6,6 @@ from datetime import datetime
 from visualiser import visualize
 import json
 
-sample_configuation = {
-	"input_path": None,
-    "tile_size": 0.25,
-    "z_high": 19,
-    "z_low": 13,
-    "x": [50, 220],
-    "y": [30, 220],
-    "horizontal_move_force": 500,
-    "vertical_move_force": 200
-}
-
 # TODO flip the image in Y
 # TODO add option to draw a rectangle around the workspace
 
