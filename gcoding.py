@@ -82,7 +82,7 @@ M84 ; Disable all steppers
 		return self.code
 
 if __name__ == '__main__':
-	plopchart = make_plopchart('data/bruh_out.png', save=False, show=False)
+	plopchart = make_plopchart('data/mogus.png', save=False, show=False)
 	moves = squiggler(plopchart)
 
 	width, height = plopchart.size
@@ -92,6 +92,7 @@ if __name__ == '__main__':
 	# TODO make a class containing moves with a method to compile it to gcode
 	# TODO add option to not home for some unregular surfaces / initial rise + setting working surface
 	# TODO option to mirror the image - important for text
+	# TODO function to manage positioning of the print on material, along with calculating dimensions
 
 	# settings = {
 	# 	'tile_size': 0.39,
@@ -105,16 +106,16 @@ if __name__ == '__main__':
 
 	
 	settings = {
-		'tile_size': 0.3,
-		'z_high': 21,
-		'z_low': 17,
-		'x': (150, 220),
-		'y': (4, 220),
+		'tile_size': 0.25,
+		'z_high': 19,
+		'z_low': 13,
+		'x': (50, 220),
+		'y': (30, 220),
 		'horizontal_move_force': 500,
 		'vertical_move_force': 200
 	}
 
 	gcoder = Gcoder(settings)
 
-	gcode = gcoder.encode(moves, save='data/bruho.gcode')
+	gcode = gcoder.encode(moves, save='data/mogus.gcode')
 	# print(gcode)
