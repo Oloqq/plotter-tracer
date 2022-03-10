@@ -17,6 +17,7 @@ class CCLI:
             self.descriptions[key] = description
 
     def loop(self):
+        print("Type 'help' for help")
         while True:
             user_data = input('\n: ').split()
             command = user_data[0]
