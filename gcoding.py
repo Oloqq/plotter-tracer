@@ -7,13 +7,6 @@ from datetime import datetime
 from visualiser import visualize
 import json
 
-# TODO flip the image in Y
-# TODO add option to draw a rectangle around the workspace
-# TODO make a class for moves (any algorithm should output that class)
-# TODO add option to not home for some unregular surfaces / initial rise + setting working surface
-# TODO option to mirror the image - important for text
-# TODO function to manage positioning of the print on material, along with calculating dimensions - instead of changing working are each time
-
 class Gcoder:
     def __init__(self, settings: PlotterConfiguration):
         self.code: str = ''

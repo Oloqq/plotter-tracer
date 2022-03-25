@@ -1,11 +1,8 @@
-# TODO validate func setting all the members to themselves,
-# thus calling setters which have validation code
 from os import path
 
 class PlotterConfiguration():
     _input_path: str = None
     tile_size: float = 0.25
-    # TODO rise_height
     z_high: float = 19
 
     z_low: float = 13

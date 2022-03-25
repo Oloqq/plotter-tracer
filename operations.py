@@ -9,24 +9,11 @@ conf = PlotterConfiguration()
 A = list[str]
 
 def run(args: A):
-    # TODO conf.validate() see configuration.py
-
-    # TODO refactor plopchart into 'extract' function
-    # taking any image and returning 2D array
-    # that will be passed to navigating algorithm 
     plopchart = make_plopchart(conf.input_path, save=False, show=False)
-    moves = squiggler(plopchart) # TODO make algortihm configurable
-
-    # TODO move this to 'visualize' command
-    # width, height = plopchart.size
-    # the result is saved in data/visualiser_out
-    # visualize(moves, width, height, show=True)
-
-    # TODO move this to a separate 'load' command
-    # settings = json.load(open('prof.json'))
+    moves = squiggler(plopchart)
 
     gcoder = Gcoder(conf)
-    gcoder.encode(moves, save='data/output.gcode') # TODO make output path configurable
+    gcoder.encode(moves, save='data/output.gcode')
 
 def select_input(args: A):
     if type(args) != list or len(args) < 2:
