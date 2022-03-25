@@ -1,3 +1,6 @@
+Im turning my 3d printer into a plotter
+just for the heck of it
+
 this codebase *is in*
 
 *unacceptable*
