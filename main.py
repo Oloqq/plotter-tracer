@@ -10,6 +10,7 @@ ccli.add('run', run,
 """)
 
 if __name__ == "__main__":
+    # input file can by passed from command line
     if len(sys.argv) > 1 and sys.argv[1]:
         ccli.funcs['input'](['input', sys.argv[1]])
     ccli.funcs['help']([])

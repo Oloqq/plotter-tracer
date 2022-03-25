@@ -1,6 +1,5 @@
 from turtle import Vec2D
 from PIL import Image, ImageDraw
-from navigating import longstroke
 from datetime import datetime
 
 # figure out the size of the visualisation from the moves
@@ -62,11 +61,12 @@ def visualize(moves, width, height, show=False):
 	now = datetime.now()
 	img.save(f'data/visualiser_out/{now.strftime("%m-%d-%Y %H-%M-%S")}.png')
 
-
 if __name__ == '__main__':
+	from navigating import squiggler
+	
 	width = 32
 	height = 32
 	img = Image.open('data/out.png')
-	moves = longstroke(img)
+	moves = squiggler(img)
 	# print(moves)
 	visualize(moves, width, height, show=True)
