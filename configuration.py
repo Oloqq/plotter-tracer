@@ -2,10 +2,10 @@ from multiprocessing import set_start_method
 from os import path
 from typing import Type
 from typing_extensions import Self
+import pprint
+pp = pprint.PrettyPrinter(indent=2)
 
 class PlotterConfiguration():
-    properties = ['input_path']
-
     def __init__(self):
         self._input_path: str = 'data/out.png'
 
@@ -20,23 +20,20 @@ class PlotterConfiguration():
 
     def validate(self, quiet=False) -> tuple[bool, Exception]:
         try:
-            for attr in self.properties:
+            for key, value in self.__dict__.items():
                 # Invoke the setter on each property
-                setattr(self, attr, getattr(self, f'_{attr}'))
+                if key.startswith('_'):
+                    setattr(self, key.lstrip('_'), value)
         except Exception as e:
             if not quiet:
                 print('Encountered an exception during validation:')
                 print(type(e))
+            # raise e # for debug
             return False, e
 
     def __str__(self) -> str:
-        return \
-f"""{{
-    input_path: {self.input_path}
-}}
-"""
-        # return 'bruh'
-
+        return pp.pformat(self.__dict__)
+                
     @property
     def input_path(self):
         print('getter')
@@ -55,3 +52,4 @@ f"""{{
 
 if __name__ == '__main__':
     a = PlotterConfiguration()
+    print(a)
