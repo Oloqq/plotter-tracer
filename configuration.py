@@ -1,32 +1,45 @@
+from multiprocessing import set_start_method
 from os import path
+from typing import Type
+from typing_extensions import Self
 
 class PlotterConfiguration():
-    _input_path: str = None
-    tile_size: float = 0.25
-    z_high: float = 19
-
-    z_low: float = 13
-    x = [50, 220]
-    y = [30, 220]
-    horizontal_move_force: int = 500
-    vertical_move_force: int = 200
+    properties = ['input_path']
 
     def __init__(self):
-        self.input_path = 'bruh'
+        self._input_path: str = 'data/out.png'
+
+        self.tile_size: float = 0.25
+        self.z_high: float = 19
+        self.z_low: float = 13
+        self.x = [50, 220]
+        self.y = [30, 220]
+        self.horizontal_move_force: int = 500
+        self.vertical_move_force: int = 200
+        self.validate()
 
     def validate(self, quiet=False) -> tuple[bool, Exception]:
         try:
-            #NOTE each property should be 'set' here
-            self.input_path = self._input_path
-
+            for attr in self.properties:
+                # Invoke the setter on each property
+                setattr(self, attr, getattr(self, f'_{attr}'))
         except Exception as e:
             if not quiet:
                 print('Encountered an exception during validation:')
-                print(e)
+                print(type(e))
             return False, e
+
+    def __str__(self) -> str:
+        return \
+f"""{{
+    input_path: {self.input_path}
+}}
+"""
+        # return 'bruh'
 
     @property
     def input_path(self):
+        print('getter')
         return self._input_path
 
     @input_path.setter

@@ -2,7 +2,7 @@ from ccli import CCLI
 from configuration import PlotterConfiguration
 from gcoding import Gcoder
 from plopping import make_plopchart
-from navigating import closing_circles, longstroke, squiggler
+from navigating import *
 
 ccli = CCLI()
 conf = PlotterConfiguration()
@@ -23,3 +23,6 @@ def select_input(args: A):
         conf.input_path = args[1]
     except FileNotFoundError:
         pass
+
+def display_configuration(args: A):
+    print(conf)

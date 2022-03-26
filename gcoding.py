@@ -1,7 +1,7 @@
 from turtle import Vec2D
 from configuration import PlotterConfiguration
 from plopping import make_plopchart
-from navigating import closing_circles, longstroke, squiggler
+from navigating import *
 from logger import log
 from datetime import datetime
 from visualiser import visualize
