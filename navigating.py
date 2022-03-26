@@ -1,14 +1,7 @@
-# algorithm (stripes)
-# pick the direction of the stripes
-# start up of the plate
-# move back and forth lowering the pen wherever there is a dot 
-
-from turtle import Vec2D
-from plopping import make_plopchart
-# from navigation_types import Node, Direction, painted, directions
 from navigation_types import *
 from logger import log
-from analyser import analyse
+
+Coord = tuple[int, int]
 
 def make_nodes(img):
 	def meet(x, y, dx, dy): # makes a pair of nodes neighbors
@@ -17,7 +10,7 @@ def make_nodes(img):
 
 	pixels = img.load()
 	width, height = img.size
-	nodemap: dict[Vec2D, Node] = {}
+	nodemap: dict[Coord, Node] = {}
 	nodes: list[Node] = []
 	for x in range(width):
 		for y in range(height):
@@ -64,8 +57,8 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 				return True
 		return False
 
-	def peel_in_place_f(nodes: list[Node], nodemap: dict[Vec2D, Node]) \
-		-> tuple[list[Node], list[Node], dict[Vec2D, Node]]:
+	def peel_in_place_f(nodes: list[Node], nodemap: dict[Coord, Node]) \
+		-> tuple[list[Node], list[Node], dict[Coord, Node]]:
 		outline = []
 		inside = []
 		for node in nodes:
@@ -76,8 +69,8 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 				inside.append(node)
 		return outline, inside, nodemap
 
-	def peel(nodes: list[Node], nodemap: dict[Vec2D, Node]) \
-		-> tuple[list[Node], list[Node], dict[Vec2D, Node]]:
+	def peel(nodes: list[Node], nodemap: dict[Coord, Node]) \
+		-> tuple[list[Node], list[Node], dict[Coord, Node]]:
 		outline = []
 		inside = []
 		newnodemap = nodemap.copy()
@@ -94,25 +87,10 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 		def prioritize_loneliest(nodes):
 			least = 10 # max neighbors in outline is 7
 			chosen = None
-			# print('search start', available, len(neighborhood.items()))
 			for neib, his_neibs in nodes.items():
 				if his_neibs < least:
 					least = his_neibs
 					chosen = neib
-					# print('new chosen', chosen, least)
-			return chosen
-
-		def prioritize_lefttop(nodes):
-			fitness = Vec2D(10000000, 10000000)
-			chosen = None
-			for node, its_neibs in nodes.items():
-				if node.pos[0] < fitness[0]:
-					chosen = node
-					fitness = node.pos
-				elif node.pos[0] == fitness[0]:
-					if node.pos[1] < fitness[1]:
-						chosen = node
-						fitness = node.pos
 			return chosen
 
 		current = outline.pop()
@@ -134,7 +112,6 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 					outline.remove(current)
 				case _: # choose the leftmost one, then the topmost
 					current = prioritize_loneliest(neighborhood)
-					# current = prioritize_lefttop(neighborhood)
 					outline.remove(current)
 			moves.append(current.pos)
 
@@ -161,15 +138,13 @@ def closing_circles(img, limit=None, continuous=False, peel_in_place=False):
 
 	return moves
 
-import visualiser
 if __name__ == "__main__":
-	# img = Image.open('data/out.png')
-	plopchart = make_plopchart('data/mak.png', save=False, show=False)
-	# moves = closing_circles(plopchart)
-	moves = squiggler(plopchart)
-	log(analyse(moves), console=True)
+	from visualiser import visualize
+	from PIL import Image
 
+	width = 32
+	height = 32
+	img = Image.open('data/out.png')
+	moves = squiggler(img)
 	# print(moves)
-	width, height = plopchart.size
-	print('Starting visualiser')
-	visualiser.visualize(moves, width, height, show=False)
+	visualize(moves, width, height, show=True)
