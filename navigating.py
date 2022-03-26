@@ -1,7 +1,7 @@
 from navigation_types import *
 from logger import log
 
-Coord = tuple[int, int]
+Coord = Vec2D
 
 def make_nodes(img):
 	def meet(x, y, dx, dy): # makes a pair of nodes neighbors

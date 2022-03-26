@@ -11,6 +11,20 @@ class PlotterConfiguration():
     horizontal_move_force: int = 500
     vertical_move_force: int = 200
 
+    def __init__(self):
+        self.input_path = 'bruh'
+
+    def validate(self, quiet=False) -> tuple[bool, Exception]:
+        try:
+            #NOTE each property should be 'set' here
+            self.input_path = self._input_path
+
+        except Exception as e:
+            if not quiet:
+                print('Encountered an exception during validation:')
+                print(e)
+            return False, e
+
     @property
     def input_path(self):
         return self._input_path
@@ -25,3 +39,6 @@ class PlotterConfiguration():
 
         print(f'Input file set to {fp}')
         self._input_path = fp
+
+if __name__ == '__main__':
+    a = PlotterConfiguration()
