@@ -6,12 +6,10 @@ ccli.add('input', select_input,
     select input file""")
 
 ccli.add('run', run, 
-"""compile gcode from the current configuration
-""")
+"""compile gcode from the current configuration""")
 
 ccli.add('print', display_configuration,
-"""display current configuration
-""")
+"""display current configuration""")
 
 if __name__ == "__main__":
     # input file can by passed from command line
