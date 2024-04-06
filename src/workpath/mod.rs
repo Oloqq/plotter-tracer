@@ -1,4 +1,4 @@
-pub mod horizontal;
+pub mod vertical;
 
 use crate::common::*;
 use crate::WorkPoints;
@@ -11,9 +11,10 @@ use imageproc::drawing::Canvas;
 use imageproc::rect::Rect;
 
 pub enum Action {
-    Up,
-    Down,
+    Retreat,
+    Engage,
     Move(V),
+    Note(String),
 }
 pub type Actions = Vec<Action>;
 
@@ -44,7 +45,8 @@ impl WorkPath {
         let grid = true;
         let color_grid = Rgba([0, 0, 0, 255]);
         let color_engaged = Rgba([128, 255, 255, 180]);
-        let color_disengaged = Rgba([255, 255, 128, 100]);
+        let color_disengaged = Rgba([255, 255, 128, 0]);
+        // let color_disengaged = Rgba([255, 255, 128, 100]);
 
         let w: Tile = *self.source_bounds.right();
         let h: Tile = *self.source_bounds.bottom();
@@ -64,8 +66,8 @@ impl WorkPath {
         let mut engaged = false;
         for action in &self.actions {
             match action {
-                Action::Up => engaged = false,
-                Action::Down => engaged = true,
+                Action::Retreat => engaged = false,
+                Action::Engage => engaged = true,
                 Action::Move(target) => {
                     let color = if engaged {
                         color_engaged
@@ -80,6 +82,7 @@ impl WorkPath {
                     );
                     pos = *target;
                 }
+                Action::Note(_) => (),
             }
         }
 

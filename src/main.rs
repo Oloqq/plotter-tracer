@@ -57,7 +57,7 @@ fn main() {
         wpo.save(path);
     }
 
-    let navi = workpath::horizontal::Horizontal {};
+    let navi = workpath::vertical::Vertical {};
     let wpa = WorkPath::with_navigator(wpo, navi);
     if let Some(path) = args.workpath_img {
         wpa.save(path);
