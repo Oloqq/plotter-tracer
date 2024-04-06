@@ -12,32 +12,35 @@ pixel_to_um = 2400
 plops_per_pixel = math.floor(pixel_to_um / brush_um)
 
 def make_plopchart(filename, save=False, show=False):
-	img = Image.open(filename)
-	pixels = img.load()
-	w, h = img.size
-	ppp = plops_per_pixel
+    img = Image.open(filename)
+    pixels = img.load()
+    w, h = img.size
+    ppp = plops_per_pixel
 
-	if ppp < 1:
-		print('ppp < 1 will need some smart interpolation. TBD')
-		exit()
+    if ppp < 1:
+        print('ppp < 1 will need some smart interpolation. TBD')
+        exit()
 
-	out = Image.new('1', (w*ppp, h*ppp), (1))
-	for x in range(w):
-		for y in range(h):
-			(r, g, b) = pixels[x, y]
-			val = r+g+b
-			for i in range(ppp):
-				for j in range(ppp):
-					out.putpixel((x*ppp+i, y*ppp+j), val)
+    out = Image.new('1', (w*ppp, h*ppp), (1))
+    for x in range(w):
+        for y in range(h):
+            try:
+                (r, g, b) = pixels[x, y]
+            except ValueError:
+                (r, g, b, a) = pixels[x, y]
+            val = r+g+b
+            for i in range(ppp):
+                for j in range(ppp):
+                    out.putpixel((x*ppp+i, y*ppp+j), val)
 
-	if type(save) is str:
-		out.save(save)
-	if show: 
-		out.show()
+    if type(save) is str:
+        out.save(save)
+    if show:
+        out.show()
 
-	return out
+    return out
 
 if __name__ == "__main__":
-	out = make_plopchart('data/smile.png', save='data/out.png', show=False)
-	print(out)
+    out = make_plopchart('data/albania.png', save='data/out.png', show=False)
+    print(out)
 
