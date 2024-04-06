@@ -1,6 +1,8 @@
 mod image_prep;
+mod params;
 
-use self::image_prep::load_image;
+use self::image_prep::SourceImage;
+pub use self::params::Params;
 use std::io::Write;
 use structopt::StructOpt;
 
@@ -32,8 +34,8 @@ fn main() {
     };
 
     log::info!("Image: {:?}", args.img_path);
-    let img = load_image(args.img_path).unwrap();
+    let img = SourceImage::load(args.img_path).unwrap();
     if let Some(path) = args.converted_img {
-        img.save(path).unwrap();
+        img.save(path);
     }
 }
