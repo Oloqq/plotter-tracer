@@ -9,8 +9,11 @@ extern crate nalgebra as na;
 
 use self::image_prep::SourceImage;
 pub use self::params::Params;
-use crate::{gcode::gcode, workpath::WorkPath, workpoints::WorkPoints};
-use std::{fs, io::Write};
+use crate::gcode::gcode;
+use crate::workpath::WorkPath;
+use crate::workpoints::WorkPoints;
+use std::fs;
+use std::io::Write;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]

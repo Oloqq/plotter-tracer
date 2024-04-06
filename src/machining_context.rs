@@ -1,6 +1,5 @@
 use crate::params::MachineParams;
-
-trait Tool {}
+use crate::workpath::Action;
 
 pub struct MachiningContext {
     pub min_x: f32,

@@ -1,5 +1,7 @@
-use super::Action::{self, *};
-use super::{Actions, Navigator};
+use super::Action::*;
+use super::Action::{self};
+use super::Actions;
+use super::Navigator;
 use crate::common::*;
 use crate::WorkPoints;
 

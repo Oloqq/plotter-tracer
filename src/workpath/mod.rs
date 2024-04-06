@@ -3,13 +3,13 @@ pub mod vertical;
 use crate::common::*;
 use crate::WorkPoints;
 use image::Pixel;
-use image::Rgb;
 use image::Rgba;
 use imageproc::drawing::draw_filled_rect_mut;
 use imageproc::drawing::draw_line_segment_mut;
 use imageproc::drawing::Canvas;
 use imageproc::rect::Rect;
 
+#[derive(Clone)]
 pub enum Action {
     Retreat,
     Engage,
