@@ -23,7 +23,7 @@ class PlotterConfiguration():
         # TODO make those properties, remake z_high into rise_height
         self._tile_size: float = 0.25
         self._z_high: float = 30
-        self._z_low: float = 27
+        self._z_low: float = 24
         self._x = [20, 160]
         self._y = [60, 100]
         self._horizontal_move_force: int = 70
