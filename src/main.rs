@@ -1,5 +1,7 @@
 mod common;
+mod gcode;
 mod image_prep;
+mod machining_context;
 mod params;
 mod workpath;
 mod workpoints;
@@ -7,14 +9,14 @@ extern crate nalgebra as na;
 
 use self::image_prep::SourceImage;
 pub use self::params::Params;
-use crate::{workpath::WorkPath, workpoints::WorkPoints};
-use std::io::Write;
+use crate::{gcode::gcode, workpath::WorkPath, workpoints::WorkPoints};
+use std::{fs, io::Write};
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
 struct Args {
     img_path: String,
-    // output: String,
+    output: String,
     #[structopt(short, long)]
     converted_img: Option<String>,
     #[structopt(short, long)]
@@ -38,7 +40,7 @@ fn main() {
     // let args = Args::from_args();
     let args = Args {
         img_path: "snek.png".into(),
-        // output: "snek.gcode".into(),
+        output: "snek.gcode".into(),
         converted_img: Some("snek_gray.png".into()),
         workpoints_img: Some("snek_workpoints.png".into()),
         workpath_img: Some("snek_workpath.png".into()),
@@ -62,4 +64,7 @@ fn main() {
     if let Some(path) = args.workpath_img {
         wpa.save(path);
     }
+
+    let gcode = gcode(&wpa, &params);
+    fs::write(args.output, gcode).unwrap();
 }

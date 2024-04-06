@@ -30,6 +30,10 @@ pub struct WorkPath {
 }
 
 impl WorkPath {
+    pub fn actions(&self) -> &Actions {
+        &self.actions
+    }
+
     pub fn with_navigator(points: WorkPoints, navigator: impl Navigator) -> Self {
         Self {
             actions: navigator.navigate(&points),

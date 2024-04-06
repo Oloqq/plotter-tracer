@@ -11,7 +11,7 @@ impl Navigator for Vertical {
         let points = points.points();
 
         let mut engaged = false;
-        let mut actions = vec![Retreat];
+        let mut actions = vec![];
         for (x, col) in points.iter().enumerate() {
             actions.push(Note(format!("Column {x}")));
             let iter = col.iter().enumerate();
