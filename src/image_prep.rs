@@ -17,3 +17,9 @@ impl SourceImage {
         self.img.save(img_path).unwrap();
     }
 }
+
+impl Into<GrayImage> for SourceImage {
+    fn into(self) -> GrayImage {
+        self.img
+    }
+}

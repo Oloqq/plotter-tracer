@@ -1,5 +1,8 @@
 mod image_prep;
 mod params;
+mod workpoints;
+
+use crate::workpoints::WorkPoints;
 
 use self::image_prep::SourceImage;
 pub use self::params::Params;
@@ -12,6 +15,8 @@ struct Args {
     // output: String,
     #[structopt(short, long)]
     converted_img: Option<String>,
+    #[structopt(short, long)]
+    workpoints_img: Option<String>,
 }
 
 // fn find_workpoints() {}
@@ -31,11 +36,19 @@ fn main() {
         img_path: "snek.png".into(),
         // output: "snek.gcode".into(),
         converted_img: Some("snek_gray.png".into()),
+        workpoints_img: Some("snek_workpoints.png".into()),
     };
+
+    let params = Params::default();
 
     log::info!("Image: {:?}", args.img_path);
     let img = SourceImage::load(args.img_path).unwrap();
     if let Some(path) = args.converted_img {
         img.save(path);
+    }
+
+    let wp = WorkPoints::from_image(&img.into(), &params);
+    if let Some(path) = args.workpoints_img {
+        wp.save(path);
     }
 }
