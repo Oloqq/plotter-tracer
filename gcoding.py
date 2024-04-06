@@ -7,6 +7,7 @@ from datetime import datetime
 from visualiser import visualize
 import json
 
+
 class Gcoder:
     def __init__(self, settings: PlotterConfiguration):
         self.code: str = ''
@@ -33,7 +34,7 @@ G0 F{self.vertical_force} Z{self.z_high} ; Lift the pen
 
 ; Drawing
 """
-        
+
         self.footer = """
 ; Footer
 G0 Z20 ; Lift the pen
@@ -59,13 +60,13 @@ M84 ; Disable all steppers
 
     def encode(self, moves, save=False):
         self.code = self.header
-        
+
         self.pen_down = False
         for step in moves:
-            if type(step) is Vec2D: # it's a displacement
+            if type(step) is Vec2D:  # it's a displacement
                 x, y = list(step)
                 self.move(x, y)
-            elif type(step) is str: # it's a non-displacement operation 
+            elif type(step) is str:  # it's a non-displacement operation
                 match step:
                     case 'pen up':
                         self.lift()
@@ -79,6 +80,7 @@ M84 ; Disable all steppers
                 f.write(self.code)
 
         return self.code
+
 
 if __name__ == '__main__':
     plopchart = make_plopchart('data/mogus.png', save=False, show=False)

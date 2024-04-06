@@ -9,11 +9,11 @@ from gcoding import encode
 # todo: handle grayscale as well as rgba
 
 if __name__ == '__main__':
-	plopchart = make_plopchart('data/mak.png', save=False, show=False)
-	moves = longstroke(plopchart)
+    plopchart = make_plopchart('data/mak.png', save=False, show=False)
+    moves = longstroke(plopchart)
 
-	width, height = plopchart.size
-	# the result is saved in data/visualiser_out
-	visualize(moves, width, height, show=True)
+    width, height = plopchart.size
+    # the result is saved in data/visualiser_out
+    visualize(moves, width, height, show=True)
 
-	encode(moves, save='data/mak.gcode')
+    encode(moves, save='data/mak.gcode')

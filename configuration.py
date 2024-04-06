@@ -5,6 +5,7 @@ from typing_extensions import Self
 import pprint
 pp = pprint.PrettyPrinter(indent=2)
 
+
 class PlotterConfiguration():
     def __init__(self):
         self._input_path: str = 'data/out.png'
@@ -33,15 +34,16 @@ class PlotterConfiguration():
 
     def __str__(self) -> str:
         return pp.pformat(self.__dict__)
-                
+
     @property
     def input_path(self):
         return self._input_path
 
     @input_path.setter
     def input_path(self, fp: str):
-        if type(fp) != str: raise TypeError
-        
+        if type(fp) != str:
+            raise TypeError
+
         if not path.exists(fp):
             print(f'file not found: {fp}\nconfiguration unchanged')
             raise FileNotFoundError

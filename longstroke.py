@@ -30,13 +30,13 @@
 # def longstroke(img, neighbor_mode: Direction = Direction.ORTHODIAGONAL):
 # 	(nodes, _) = make_nodes(img)
 # 	paths = []
-	
+
 # 	# find all the paths
 # 	node = nodes.pop()
 # 	paths.append([])
 # 	path = paths[len(paths) - 1]
 # 	path.append(node.pos)
-# 	while len(nodes) > 0:		
+# 	while len(nodes) > 0:
 # 		longchain = 0
 # 		selected = (0, 0)
 # 		for reverse in directions[neighbor_mode]:
@@ -56,8 +56,8 @@
 # 			else: break
 # 			paths.append([])
 # 			path = paths[len(paths) - 1]
-# 			path.append(node.pos)			
-	
+# 			path.append(node.pos)
+
 # 	# figure out the order of drawing
 # 	def distance(left: Vec2D, right: Vec2D):
 # 		return math.sqrt((left - right) * (left - right))

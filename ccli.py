@@ -2,6 +2,8 @@ from typing import Callable
 VerbHandler = Callable[[list[str]], None]
 
 # Continuous Command Line Interface
+
+
 class CCLI:
     funcs: dict[str, VerbHandler] = {}
     descriptions: dict[str, str] = {}
@@ -9,7 +11,7 @@ class CCLI:
     def __init__(self) -> None:
         self.add('help', self.help, 'Display this message')
 
-    def add(self, keys: str|list[str], function: VerbHandler, description: str):
+    def add(self, keys: str | list[str], function: VerbHandler, description: str):
         if type(keys) == str:
             keys = [keys]
         for key in keys:
@@ -34,6 +36,7 @@ class CCLI:
         print('exit: exit\n')
         for k, v in self.descriptions.items():
             print(f'{k}: {v}\n')
+
 
 if __name__ == "__main__":
     ccli = CCLI()
