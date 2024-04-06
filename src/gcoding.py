@@ -1,10 +1,10 @@
 from turtle import Vec2D
-from configuration import PlotterConfiguration
-from plopping import make_plopchart
-from navigating import *
-from logger import log
+from .configuration import PlotterConfiguration
+from .plopping import make_plopchart
+from .navigating import *
+from .logger import log
 from datetime import datetime
-from visualiser import visualize
+from .visualiser import visualize
 import json
 
 

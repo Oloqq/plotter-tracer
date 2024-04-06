@@ -1,5 +1,5 @@
-from navigation_types import *
-from logger import log
+from .navigation_types import *
+from .logger import log
 
 Coord = Vec2D
 

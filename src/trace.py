@@ -1,7 +1,7 @@
-from plopping import make_plopchart
-from navigating import longstroke
-from visualiser import visualize
-from gcoding import encode
+from .plopping import make_plopchart
+from .navigating import longstroke
+from .visualiser import visualize
+from .gcoding import encode
 
 # slicing 3d objects into layers to print - slicer
 # tracing the route of a pen on paper     - tracer

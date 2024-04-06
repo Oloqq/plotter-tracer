@@ -1,5 +1,5 @@
 import sys
-from operations import *
+from .operations import *
 
 ccli.add('input', select_input,
          """filepath
@@ -11,10 +11,15 @@ ccli.add('run', run,
 ccli.add('print', display_configuration,
          """display current configuration""")
 
-if __name__ == "__main__":
+
+def main():
     # input file can by passed from command line
     if len(sys.argv) > 1 and sys.argv[1]:
         ccli.funcs['input'](['input', sys.argv[1]])
     ccli.funcs['help']([])
 
     ccli.loop()
+
+
+if __name__ == "__main__":
+    main()

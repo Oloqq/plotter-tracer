@@ -1,8 +1,8 @@
-from ccli import CCLI
-from configuration import PlotterConfiguration
-from gcoding import Gcoder
-from plopping import make_plopchart
-from navigating import *
+from .ccli import CCLI
+from .configuration import PlotterConfiguration
+from .gcoding import Gcoder
+from .plopping import make_plopchart
+from .navigating import *
 
 ccli = CCLI()
 conf = PlotterConfiguration()
