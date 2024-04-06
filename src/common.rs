@@ -1,4 +1,5 @@
 use getset::Getters;
+pub type V = na::Vector2<f32>;
 
 #[derive(Debug, Getters, Clone, Copy)]
 pub struct Bounds<T> {

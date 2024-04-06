@@ -3,11 +3,11 @@ mod image_prep;
 mod params;
 mod workpath;
 mod workpoints;
-
-use crate::{workpath::WorkPath, workpoints::WorkPoints};
+extern crate nalgebra as na;
 
 use self::image_prep::SourceImage;
 pub use self::params::Params;
+use crate::{workpath::WorkPath, workpoints::WorkPoints};
 use std::io::Write;
 use structopt::StructOpt;
 

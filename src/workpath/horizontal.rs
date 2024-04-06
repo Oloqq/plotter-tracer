@@ -1,4 +1,5 @@
 use super::{Actions, Navigator};
+use crate::common::*;
 use crate::WorkPoints;
 
 pub struct Horizontal {}
@@ -9,6 +10,13 @@ impl Navigator for Horizontal {
         let _points = points.points();
 
         use super::Action::*;
-        vec![Move(0, 0), Move(2, 0), Up, Move(4, 0), Down, Move(5, 0)]
+        vec![
+            Move(V::new(0.0, 0.0)),
+            Move(V::new(2.0, 4.0)),
+            Up,
+            Move(V::new(4.0, 0.0)),
+            Down,
+            Move(V::new(5.0, 6.0)),
+        ]
     }
 }
