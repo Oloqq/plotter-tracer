@@ -35,11 +35,13 @@ G0 F{self.vertical_force} Z{self.z_high} ; Lift the pen
 ; Drawing
 """
 
-        self.footer = """
+    def footer(self):
+        f = f"""
 ; Footer
-G0 Z20 ; Lift the pen
+G0 Z{self.z_high + 10} ; Lift the pen
 M84 ; Disable all steppers
 """
+        return f
 
     def move(self, x, y):
         out_x = x * self.tile_size + self.min_x
@@ -73,7 +75,7 @@ M84 ; Disable all steppers
                     case 'pen down':
                         self.dive()
 
-        self.code += self.footer
+        self.code += self.footer()
 
         if type(save) is str:
             with open(save, 'w') as f:

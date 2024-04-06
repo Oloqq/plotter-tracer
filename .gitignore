@@ -1,9 +1,8 @@
+.*
+
 venv
-data
 __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info
-printed
-logs
 latest_log.txt

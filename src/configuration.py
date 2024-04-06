@@ -7,7 +7,7 @@ pp = pprint.PrettyPrinter(indent=2)
 
 
 class PlotterConfiguration():
-    def __init__(self):
+    def pen(self):
         self._input_path: str = 'data/out.png'
         # TODO make those properties, remake z_high into rise_height
         self._tile_size: float = 0.25
@@ -17,6 +17,21 @@ class PlotterConfiguration():
         self._y = [30, 220]
         self._horizontal_move_force: int = 500
         self._vertical_move_force: int = 200
+
+    def mill(self):
+        self._input_path: str = 'data/out.png'
+        # TODO make those properties, remake z_high into rise_height
+        self._tile_size: float = 0.25
+        self._z_high: float = 30
+        self._z_low: float = 26
+        self._x = [40, 160]
+        self._y = [50, 100]
+        self._horizontal_move_force: int = 100
+        self._vertical_move_force: int = 200
+
+    def __init__(self):
+        # self.pen()
+        self.mill()
         self.validate()
 
     def validate(self, quiet=False) -> tuple[bool, Exception]:
