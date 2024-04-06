@@ -7,9 +7,12 @@ from PIL import Image
 import math
 
 # sample values todo: make configurable
-brush_um = 2400 # um = micrometers
+brush_um = 2400  # um = micrometers
 pixel_to_um = 2400
+# brush_um = 9600  # um = micrometers
+# pixel_to_um = 9600
 plops_per_pixel = math.floor(pixel_to_um / brush_um)
+
 
 def make_plopchart(filename, save=False, show=False):
     img = Image.open(filename)
@@ -40,7 +43,7 @@ def make_plopchart(filename, save=False, show=False):
 
     return out
 
+
 if __name__ == "__main__":
     out = make_plopchart('data/albania.png', save='data/out.png', show=False)
     print(out)
-
